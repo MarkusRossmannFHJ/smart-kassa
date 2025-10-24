@@ -1,0 +1,92 @@
+# ======================
+# macOS system files
+# ======================
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+.idea/
+.vscode/
+*.swp
+
+# ======================
+# Python cache / compiled files
+# ======================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ======================
+# Virtual environments
+# ======================
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ======================
+# Jupyter Notebook checkpoints
+# ======================
+.ipynb_checkpoints
+
+# ======================
+# Distribution / packaging
+# ======================
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+*.manifest
+*.spec
+
+# ======================
+# Logs and databases
+# ======================
+*.log
+*.pot
+*.sqlite3
+db.sqlite3
+
+# ======================
+# Unit test / coverage reports
+# ======================
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+*.hypothesis/
+.pytest_cache/
+
+# ======================
+# PyInstaller
+# ======================
+*.manifest
+*.spec
+
+# ======================
+# IDE settings
+# ======================
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# ======================
+# Miscellaneous
+# ======================
+*.bak
+*.tmp
+*.orig
+*.save
