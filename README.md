@@ -42,6 +42,6 @@ Mario Shenouda <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gith
 Markus Rossmann <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="20"/> [GitHub-Profil](https://github.com/MarkusRossmannFHJ)
 
 ## Further Information
-This project is part of an internal internship program at FH Joanneum.
+This project is part of an internal internship program at [FH Joanneum](https://www.fh-joanneum.at/en/).
 
 ## Licence
