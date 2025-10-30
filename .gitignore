@@ -90,3 +90,6 @@ coverage.xml
 *.tmp
 *.orig
 *.save
+
+node_modules
+node_modules/
