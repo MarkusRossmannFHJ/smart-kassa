@@ -47,10 +47,10 @@ export default function App() {
         </ul>
       </section>
 
-        {(count === 5) && (
+        {(count >=  5) && (
              <Confetti
-      width={1000}
-      height={1000}
+      width={2000}
+      height={2000}
     />
         )}
       
