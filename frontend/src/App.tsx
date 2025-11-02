@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ModeToggle } from "./components/ModdleToggle";
 
 /**
  * The Routes are all declared here
@@ -21,6 +22,9 @@ function App() {
         />
         <Route path="/register" element={<Register />} />
       </Routes>
+      <footer className="absolute bottom-3 right-2">
+        <ModeToggle />
+      </footer>
     </Router>
   );
 }

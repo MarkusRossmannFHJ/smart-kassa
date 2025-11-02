@@ -8,6 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { useTheme } from "../hooks/useTheme";
+import { useState } from "react";
+
+type Theme = "light" | "dark" | "system";
 
 /**
  * A Theme Switcher
@@ -15,6 +18,12 @@ import { useTheme } from "../hooks/useTheme";
  */
 export function ModeToggle() {
   const { setTheme } = useTheme();
+  const [buttonSelected, setButtonSelected] = useState("");
+
+  const handleSetTheme = (theme: Theme) => {
+    setTheme(theme);
+    setButtonSelected(theme.toString());
+  };
 
   return (
     <DropdownMenu>
@@ -26,13 +35,28 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+        <DropdownMenuItem
+          className={`hover:cursor-pointer ${
+            buttonSelected === "light" && "bg-zinc-100 dark:bg-zinc-800"
+          }`}
+          onClick={() => handleSetTheme("light")}
+        >
+          Hell
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+        <DropdownMenuItem
+          className={`hover:cursor-pointer ${
+            buttonSelected === "dark" && "bg-zinc-100 dark:bg-zinc-800"
+          }`}
+          onClick={() => handleSetTheme("dark")}
+        >
+          Dunkel
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
+        <DropdownMenuItem
+          className={`hover:cursor-pointer ${
+            buttonSelected === "system" && "bg-zinc-100 dark:bg-zinc-800"
+          }`}
+          onClick={() => handleSetTheme("system")}
+        >
           System
         </DropdownMenuItem>
       </DropdownMenuContent>
