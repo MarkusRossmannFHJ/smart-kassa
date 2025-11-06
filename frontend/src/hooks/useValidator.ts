@@ -21,7 +21,7 @@ export const useInvalidPassword = (password: string) => {
     password
   );
   const passwordhasNumber = /[0-9]/.test(password);
-  const passwordminimum6Chars = password.length > 6;
+  const passwordminimum6Chars = password.length >= 6;
   const passwordIsInvalid =
     !passwordminimum6Chars || !passwordhasNumber || !passwordhasSpecialChar;
   const passwordInvalidData: PASSWORD_VALIDATOR = {
