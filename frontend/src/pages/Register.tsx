@@ -17,13 +17,20 @@ import {
   InputGroupInput,
 } from "../components/ui/input-group";
 import { Eye, EyeClosed } from "lucide-react";
+import {
+  useInvalidEmail,
+  useInvalidPassword,
+  useInvalidUsername,
+  type PASSWORD_VALIDATOR,
+} from "../hooks/useValidator";
 
 /**
  * To handle if user clicked in input field and focuses it
  */
-interface focused {
-  clicked: boolean;
-  focus: boolean;
+interface showError {
+  UsernameFocused: boolean;
+  EmailFocused: boolean;
+  PasswordFocused: boolean;
 }
 
 /**
@@ -35,19 +42,18 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [focusUsername, setFocusUsername] = useState<focused>({
-    clicked: false,
-    focus: false,
+  // to show the user how to input valid data and in which input field
+  const [showHint, setShowHint] = useState<showError>({
+    UsernameFocused: false,
+    EmailFocused: false,
+    PasswordFocused: false,
   });
-  const [focusEmail, setFocusEmail] = useState<focused>({
-    clicked: false,
-    focus: false,
-  });
-  const [focusPassword, setFocusPassword] = useState<focused>({
-    clicked: false,
-    focus: false,
-  });
+
   const hasShownToast = useRef(false);
+
+  const invalidUsername = useInvalidUsername(username);
+  const invalidEmail = useInvalidEmail(email);
+  const invalidPassword: PASSWORD_VALIDATOR = useInvalidPassword(password);
 
   useEffect(() => {
     if (!hasShownToast.current) {
@@ -63,25 +69,9 @@ function Register() {
     }
   }, []);
 
-  const usernameIsEmpty = username === "";
-  const usernameIsInvalid = usernameIsEmpty;
-
-  const emailMatchesPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
-  const emailIsInvalid = !emailMatchesPattern;
-
-  const passwordhasSpecialChar = /[!@#$%^&*()_+=[\]{};':"\\|,.<>/?-]/.test(
-    password
-  );
-  const passwordhasNumber = /[0-9]/.test(password);
-  const passwordminimum6Chars = password.length > 6;
-  const passwordIsInvalid =
-    !passwordminimum6Chars || !passwordhasNumber || !passwordhasSpecialChar;
-
   //Form Validator, so the username is not empty, the email is not unvalid and the password is min. 6 chars long, one Special char and one Digit
   const formUnvalid =
-    usernameIsInvalid ||
-    emailIsInvalid ||
-    passwordIsInvalid;
+    invalidUsername || invalidEmail || invalidPassword.passwordIsInvalid;
 
   return (
     <main className="w-screen h-screen flex justify-center items-center bg-zinc-200 dark:bg-black">
@@ -102,34 +92,24 @@ function Register() {
                   required
                   value={username}
                   className={
-                    focusUsername.clicked &&
-                    focusUsername.focus &&
-                    usernameIsInvalid
-                      ? "border-2 border-red-500"
-                      : ""
-                  }
-                  onFocus={() =>
-                    setFocusUsername((prev) => ({
-                      ...prev,
-                      focus: true,
-                    }))
-                  }
-                  onBlur={() =>
-                    setFocusUsername((prev) => ({
-                      ...prev,
-                      focus: false,
-                      clicked: true,
-                    }))
+                    (invalidUsername &&
+                      showHint.UsernameFocused &&
+                      "border-2 border-red-500") ||
+                    ""
                   }
                   onChange={(e) => setUsername(e.target.value)}
+                  onBlur={() =>
+                    setShowHint((prev) => ({ ...prev, UsernameFocused: true }))
+                  }
+                  onFocus={() =>
+                    setShowHint((prev) => ({ ...prev, UsernameFocused: false }))
+                  }
                 />
-                {focusUsername.focus &&
-                  focusUsername.clicked &&
-                  usernameIsEmpty && (
-                    <p className="text-red-500 text-sm">
-                      Username darf nicht leer sein
-                    </p>
-                  )}
+                {invalidUsername && showHint.UsernameFocused && (
+                  <p className="text-red-500 text-sm">
+                    Username darf nicht leer sein
+                  </p>
+                )}
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -140,34 +120,24 @@ function Register() {
                   required
                   value={email}
                   className={
-                    focusEmail.clicked &&
-                    focusEmail.focus &&
-                    emailIsInvalid
-                      ? "border-2 border-red-500"
-                      : ""
-                  }
-                  onFocus={() =>
-                    setFocusEmail((prev) => ({
-                      ...prev,
-                      focus: true,
-                    }))
-                  }
-                  onBlur={() =>
-                    setFocusEmail((prev) => ({
-                      ...prev,
-                      focus: false,
-                      clicked: true,
-                    }))
+                    (invalidEmail &&
+                      showHint.EmailFocused &&
+                      "border-2 border-red-500") ||
+                    ""
                   }
                   onChange={(e) => setEmail(e.target.value)}
+                  onBlur={() =>
+                    setShowHint((prev) => ({ ...prev, EmailFocused: true }))
+                  }
+                  onFocus={() =>
+                    setShowHint((prev) => ({ ...prev, EmailFocused: false }))
+                  }
                 />
-                {focusEmail.focus &&
-                  focusEmail.clicked &&
-                  emailIsInvalid && (
-                    <p className="text-red-500 text-sm">
-                      Bitte geben Sie eine gültige E-Mail-Adresse ein
-                    </p>
-                  )}
+                {invalidEmail && showHint.EmailFocused && (
+                  <p className="text-red-500 text-sm">
+                    Bitte geben Sie eine gültige E-Mail-Adresse ein
+                  </p>
+                )}
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -181,11 +151,10 @@ function Register() {
                 </div>
                 <InputGroup
                   className={
-                    focusPassword.clicked &&
-                    focusPassword.focus &&
-                    passwordIsInvalid
-                      ? "border-2 border-red-500"
-                      : ""
+                    (invalidPassword.passwordIsInvalid &&
+                      showHint.PasswordFocused &&
+                      "border-2 border-red-500") ||
+                    ""
                   }
                 >
                   <InputGroupInput
@@ -195,20 +164,13 @@ function Register() {
                     placeholder="6 Zeichen langes Passwort mit einer Zahl und einem Zeichen"
                     required
                     value={password}
-                    onFocus={() =>
-                      setFocusPassword((prev) => ({
-                        ...prev,
-                        focus: true,
-                      }))
-                    }
-                    onBlur={() =>
-                      setFocusPassword((prev) => ({
-                        ...prev,
-                        focus: false,
-                        clicked: true,
-                      }))
-                    }
                     onChange={(e) => setPassword(e.target.value)}
+                    onBlur={() =>
+                      setShowHint((prev) => ({
+                        ...prev,
+                        PasswordFocused: true,
+                      }))
+                    }
                   />
 
                   <InputGroupAddon align="inline-end">
@@ -224,23 +186,20 @@ function Register() {
                     </div>
                   </InputGroupAddon>
                 </InputGroup>
-                {focusPassword.focus &&
-                  focusPassword.clicked &&
-                  !passwordhasNumber && (
+                {!invalidPassword.passwordhasNumber &&
+                  showHint.PasswordFocused && (
                     <p className="text-red-500 text-sm">
                       Passwort braucht mindestens eine Nummer
                     </p>
                   )}
-                {focusPassword.focus &&
-                  focusPassword.clicked &&
-                  !passwordhasSpecialChar && (
+                {!invalidPassword.passwordhasSpecialChar &&
+                  showHint.PasswordFocused && (
                     <p className="text-red-500 text-sm">
                       Passwort braucht mindestens ein Sonderzeichen
                     </p>
                   )}
-                {focusPassword.focus &&
-                  focusPassword.clicked &&
-                  !passwordminimum6Chars && (
+                {!invalidPassword.passwordminimum6Chars &&
+                  showHint.PasswordFocused && (
                     <p className="text-red-500 text-sm">
                       Passwort braucht mindestens 6 Zeichen
                     </p>
@@ -255,7 +214,6 @@ function Register() {
             className="w-full"
             onClick={() =>
               toast("Registrierung erfolgreich! Sie werden weitergeleitet...", {
-                description: "Sunday, December 03, 2023 at 9:00 AM",
                 position: "top-center",
                 closeButton: true,
               })
@@ -264,11 +222,7 @@ function Register() {
           >
             Registrieren
           </Button>
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={() => console.log()}
-          >
+          <Button variant="outline" className="w-full">
             Anmelden mit Google
           </Button>
           <div className="w-full flex justify-center">

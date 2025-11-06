@@ -1,0 +1,36 @@
+export const useInvalidUsername = (username: string) => {
+  const usernameIsInvalid = username === "";
+  return usernameIsInvalid;
+};
+
+export const useInvalidEmail = (email: string) => {
+  const emailIsInvalid =
+    !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+  return emailIsInvalid;
+};
+
+export interface PASSWORD_VALIDATOR {
+  passwordIsInvalid: boolean;
+  passwordhasSpecialChar: boolean;
+  passwordhasNumber: boolean;
+  passwordminimum6Chars: boolean;
+}
+
+export const useInvalidPassword = (password: string) => {
+  const passwordhasSpecialChar = /[!@#$%^&*()§_+=[\]{};':"\\|,.<>/?-]/.test(
+    password
+  );
+  const passwordhasNumber = /[0-9]/.test(password);
+  const passwordminimum6Chars = password.length > 6;
+  const passwordIsInvalid =
+    !passwordminimum6Chars || !passwordhasNumber || !passwordhasSpecialChar;
+  const passwordInvalidData: PASSWORD_VALIDATOR = {
+    passwordIsInvalid: passwordIsInvalid,
+    passwordhasSpecialChar: passwordhasSpecialChar,
+    passwordhasNumber: passwordhasNumber,
+    passwordminimum6Chars: passwordminimum6Chars,
+  };
+
+  return passwordInvalidData;
+};
+
