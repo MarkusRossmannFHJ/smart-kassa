@@ -22,7 +22,7 @@ function App() {
         />
         <Route path="/register" element={<Register />} />
       </Routes>
-      <footer className="absolute bottom-3 right-2">
+      <footer className="fixed bottom-3 right-2">
         <ModeToggle />
       </footer>
     </Router>
