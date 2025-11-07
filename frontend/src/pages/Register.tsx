@@ -1,5 +1,6 @@
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
+import {Link} from "react-router-dom"
 import {
   Card,
   CardHeader,
@@ -75,8 +76,10 @@ function Register() {
 
   return (
     <main className="w-screen h-screen flex justify-center items-center bg-zinc-200 dark:bg-black">
-      <Card className="w-11/12 max-w-sm">
-        <CardHeader>
+      <Card className="w-11/12 max-w-sm py-4 px-2">
+      <img src="Logo.png" width={220} height={220} alt="Logo" 
+      className="mx-auto mb-2"></img>
+        <CardHeader className="text-center mb-10">
           <CardTitle>Konto erstellen</CardTitle>
           <CardDescription>Noch kein Konto? Jetzt registrieren</CardDescription>
         </CardHeader>
@@ -227,7 +230,7 @@ function Register() {
           </Button>
           <div className="w-full flex justify-center">
             <Button variant="link" className="items-start">
-              Bereits registriert? Zum Login
+              <Link to="/login" className="underline">Bereits registriert? Zum Login</Link>
             </Button>
           </div>
         </CardFooter>
