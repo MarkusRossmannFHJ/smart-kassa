@@ -110,10 +110,12 @@ function Login() {
 
   return (
     <main className="w-screen h-screen flex justify-center items-center bg-zinc-200 dark:bg-black">
-      <Card className="w-11/12 max-w-sm">
-        <CardHeader>
+      <Card className="w-11/12 max-w-sm py-4 px-2">
+      <img src="Logo.png" width={220} height={220} alt="Logo" 
+      className="mx-auto mb-2"></img>
+        <CardHeader className="text-center mb-10">
           <CardTitle>Login</CardTitle>
-          <CardDescription>Logen Sie sich in ihr Account ein</CardDescription>
+          <CardDescription>Bitte logen Sie sich ein</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
@@ -157,7 +159,7 @@ function Login() {
                   <Label htmlFor="password">Passwort</Label>
                   <a
                     href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                    className="ml-auto inline-block text-sm text-muted-foreground font-extrabold underline hover:text-violet-400"
                   >
                     Passwort vergessen?
                   </a>
@@ -223,15 +225,15 @@ function Login() {
           <Button variant="outline" className="w-full">
             Anmelden mit Google
           </Button>
-          <div className="w-full flex justify-center">
+          <div className="w-full flex justify-center mt-2">
             <div className="text-center">
               <div className="text-center text-sm text-muted-foreground">
                 <p>Noch kein Konto?</p>
                 <Link
                   to="/register"
-                  className="font-extrabold hover:underline"
+                  className="font-extrabold underline hover:text-violet-400"
                 >
-                  Registrieren Sie sich jetzt!
+                  Registrieren Sie sich!
                 </Link>
               </div>
             </div>

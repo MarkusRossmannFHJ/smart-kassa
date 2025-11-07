@@ -81,7 +81,7 @@ function Register() {
       className="mx-auto mb-2"></img>
         <CardHeader className="text-center mb-10">
           <CardTitle>Konto erstellen</CardTitle>
-          <CardDescription>Noch kein Konto? Jetzt registrieren</CardDescription>
+          <CardDescription>Bitte erstellen Sie ein Konto</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
@@ -143,15 +143,8 @@ function Register() {
                 )}
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
                   <Label htmlFor="password">Passwort</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Passwort vergessen?
-                  </a>
-                </div>
+                
                 <InputGroup
                   className={
                     (invalidPassword.passwordIsInvalid &&
@@ -164,7 +157,7 @@ function Register() {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     title="Über 6 Zeichen mit einer Zahl und einem Zeichen"
-                    placeholder="6 Zeichen langes Passwort mit einer Zahl und einem Zeichen"
+                    placeholder="******"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -228,10 +221,18 @@ function Register() {
           <Button variant="outline" className="w-full">
             Anmelden mit Google
           </Button>
-          <div className="w-full flex justify-center">
-            <Button variant="link" className="items-start">
-              <Link to="/login" className="underline">Bereits registriert? Zum Login</Link>
-            </Button>
+           <div className="w-full flex justify-center mt-2">
+            <div className="text-center">
+              <div className="text-center text-sm text-muted-foreground">
+                <p>Haben Sie bereits ein Konto?</p>
+                <Link
+                  to="/login"
+                  className="font-extrabold underline hover:text-violet-400"
+                >
+                  Logen Sie sich ein!
+                </Link>
+              </div>
+            </div>
           </div>
         </CardFooter>
       </Card>
