@@ -110,10 +110,12 @@ function Login() {
 
   return (
     <main className="w-screen h-screen flex justify-center items-center bg-zinc-200 dark:bg-black">
-      <Card className="w-11/12 max-w-sm">
-        <CardHeader>
+      <Card className="w-11/12 max-w-sm py-4 px-2">
+      <img src="Logo.png" width={220} height={220} alt="Logo" 
+      className="mx-auto mb-2"></img>
+        <CardHeader className="text-center mb-10">
           <CardTitle>Login</CardTitle>
-          <CardDescription>Logen Sie sich in ihr Account ein</CardDescription>
+          <CardDescription>Bitte logen Sie sich ein.</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
@@ -226,13 +228,11 @@ function Login() {
           <div className="w-full flex justify-center">
             <div className="text-center">
               <div className="text-center text-sm text-muted-foreground">
-                <p>Noch kein Konto?</p>
-                <Link
-                  to="/register"
-                  className="font-extrabold hover:underline"
-                >
-                  Registrieren Sie sich jetzt!
-                </Link>
+                <div className="w-full flex justify-center">
+            <Button variant="link" className="items-start">
+              <Link to="/register" className="underline">Noch kein Konto? Jetzt registrieren</Link>
+            </Button>
+          </div>
               </div>
             </div>
           </div>
