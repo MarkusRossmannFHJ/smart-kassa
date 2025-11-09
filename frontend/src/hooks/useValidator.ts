@@ -34,3 +34,20 @@ export const useInvalidPassword = (password: string) => {
   return passwordInvalidData;
 };
 
+export const useInvalidATU = (atu: string) => {
+  const atuIsInvalid = atu === "" || !/^ATU\d{8}$/.test(atu);
+  return atuIsInvalid;
+};
+
+export const useInvalidFirmenbuchnummer = (fn: string) => {
+  const fnIsInvalid = fn === "" || !/^FN\d{1,6}[a-z]?$/i.test(fn);
+  return fnIsInvalid;
+};
+
+export const useInvalidTelefonnummer = (telefon: string) => {
+  const telefonIsInvalid =
+    telefon === "" ||
+    !/^[\d\s+()-]{7,20}$/.test(telefon) ||
+    telefon.length < 7;
+  return telefonIsInvalid;
+};
