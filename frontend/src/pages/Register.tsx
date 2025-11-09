@@ -1,6 +1,6 @@
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 import {
   Card,
   CardHeader,
@@ -18,9 +18,13 @@ import {
   InputGroupInput,
 } from "../components/ui/input-group";
 import { Eye, EyeClosed } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
+  useInvalidATU,
   useInvalidEmail,
+  useInvalidFirmenbuchnummer,
   useInvalidPassword,
+  useInvalidTelefonnummer,
   useInvalidUsername,
   type PASSWORD_VALIDATOR,
 } from "../hooks/useValidator";
@@ -32,6 +36,9 @@ interface showError {
   UsernameFocused: boolean;
   EmailFocused: boolean;
   PasswordFocused: boolean;
+  ATUFocused: boolean;
+  FNFocused: boolean;
+  TelefonnummerFocused: boolean;
 }
 
 /**
@@ -42,18 +49,28 @@ function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [atu, setAtu] = useState("");
+  const [firmenbuchnummer, setFirmenbuchnummer] = useState("");
+  const [telefonnummer, setTelefonnummer] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
   // to show the user how to input valid data and in which input field
   const [showHint, setShowHint] = useState<showError>({
     UsernameFocused: false,
     EmailFocused: false,
     PasswordFocused: false,
+    ATUFocused: false,
+    FNFocused: false,
+    TelefonnummerFocused: false,
   });
 
   const hasShownToast = useRef(false);
 
   const invalidUsername = useInvalidUsername(username);
   const invalidEmail = useInvalidEmail(email);
+  const invalidATU = useInvalidATU(atu);
+  const invalidFN = useInvalidFirmenbuchnummer(firmenbuchnummer);
+  const invalidTelefonNumber = useInvalidTelefonnummer(telefonnummer);
   const invalidPassword: PASSWORD_VALIDATOR = useInvalidPassword(password);
 
   useEffect(() => {
@@ -72,14 +89,24 @@ function Register() {
 
   //Form Validator, so the username is not empty, the email is not unvalid and the password is min. 6 chars long, one Special char and one Digit
   const formUnvalid =
-    invalidUsername || invalidEmail || invalidPassword.passwordIsInvalid;
+    invalidUsername ||
+    invalidEmail ||
+    invalidPassword.passwordIsInvalid ||
+    invalidATU ||
+    invalidFN ||
+    invalidTelefonNumber;
 
   return (
-    <main className="w-screen h-screen flex justify-center items-center bg-zinc-200 dark:bg-black">
-      <Card className="w-11/12 max-w-sm py-4 px-2">
-      <img src="Logo.png" width={220} height={220} alt="Logo" 
-      className="mx-auto mb-2"></img>
-        <CardHeader className="text-center mb-10">
+    <main className="min-w-screen min-h-screen flex justify-center items-center bg-zinc-200 dark:bg-black overflow-y-auto scrollbar-hide">
+      <Card className="w-11/12 max-w-sm my-5 dark:bg-zinc-900 pt-4">
+        <img
+          src="Logo.png"
+          width={220}
+          height={220}
+          alt="Logo"
+          className="mx-auto mb-2"
+        ></img>
+        <CardHeader>
           <CardTitle>Konto erstellen</CardTitle>
           <CardDescription>Noch kein Konto? Jetzt registrieren</CardDescription>
         </CardHeader>
@@ -87,7 +114,7 @@ function Register() {
           <form>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="username">Username</Label>
+                <Label htmlFor="username">Name</Label>
                 <Input
                   id="username"
                   type="text"
@@ -108,11 +135,19 @@ function Register() {
                     setShowHint((prev) => ({ ...prev, UsernameFocused: false }))
                   }
                 />
-                {invalidUsername && showHint.UsernameFocused && (
-                  <p className="text-red-500 text-sm">
-                    Username darf nicht leer sein
-                  </p>
-                )}
+                <AnimatePresence>
+                  {invalidUsername && showHint.UsernameFocused && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-red-500 text-sm"
+                    >
+                      Username darf nicht leer sein
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -136,11 +171,136 @@ function Register() {
                     setShowHint((prev) => ({ ...prev, EmailFocused: false }))
                   }
                 />
-                {invalidEmail && showHint.EmailFocused && (
-                  <p className="text-red-500 text-sm">
-                    Bitte geben Sie eine gültige E-Mail-Adresse ein
-                  </p>
-                )}
+                <AnimatePresence>
+                  {invalidEmail && showHint.EmailFocused && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-red-500 text-sm"
+                    >
+                      Bitte geben Sie eine gültige E-Mail-Adresse ein
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="ATU">ATU</Label>
+                <Input
+                  id="ATU"
+                  type="text"
+                  placeholder="ATU12345678"
+                  required
+                  value={atu}
+                  className={
+                    (invalidATU &&
+                      showHint.ATUFocused &&
+                      "border-2 border-red-500") ||
+                    ""
+                  }
+                  onChange={(e) => setAtu(e.target.value)}
+                  onBlur={() =>
+                    setShowHint((prev) => ({ ...prev, ATUFocused: true }))
+                  }
+                  onFocus={() =>
+                    setShowHint((prev) => ({ ...prev, ATUFocused: false }))
+                  }
+                />
+                <AnimatePresence>
+                  {invalidATU && showHint.ATUFocused && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-red-500 text-sm"
+                    >
+                      Bitte geben Sie eine gültige ATU-Nummer ein (Format:
+                      ATU12345678)
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="FirmenBuchNummer">Firmenbuchnummer (FN)</Label>
+                <Input
+                  id="FirmenBuchNummer"
+                  type="text"
+                  placeholder="FN12345a"
+                  required
+                  value={firmenbuchnummer}
+                  className={
+                    (invalidFN &&
+                      showHint.FNFocused &&
+                      "border-2 border-red-500") ||
+                    ""
+                  }
+                  onChange={(e) => setFirmenbuchnummer(e.target.value)}
+                  onBlur={() =>
+                    setShowHint((prev) => ({ ...prev, FNFocused: true }))
+                  }
+                  onFocus={() =>
+                    setShowHint((prev) => ({ ...prev, FNFocused: false }))
+                  }
+                />
+                <AnimatePresence>
+                  {invalidFN && showHint.FNFocused && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-red-500 text-sm"
+                    >
+                      Bitte geben Sie eine gültige Firmenbuchnummer ein (Format:
+                      FN12345a)
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="Telefonnummer">Telefonnummer</Label>
+                <Input
+                  id="Telefonnummer"
+                  type="tel"
+                  placeholder="+43 123 456789"
+                  required
+                  value={telefonnummer}
+                  className={
+                    (invalidTelefonNumber &&
+                      showHint.TelefonnummerFocused &&
+                      "border-2 border-red-500") ||
+                    ""
+                  }
+                  onChange={(e) => setTelefonnummer(e.target.value)}
+                  onBlur={() =>
+                    setShowHint((prev) => ({
+                      ...prev,
+                      TelefonnummerFocused: true,
+                    }))
+                  }
+                  onFocus={() =>
+                    setShowHint((prev) => ({
+                      ...prev,
+                      TelefonnummerFocused: false,
+                    }))
+                  }
+                />
+                <AnimatePresence>
+                  {invalidTelefonNumber && showHint.TelefonnummerFocused && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-red-500 text-sm"
+                    >
+                      Bitte geben Sie eine gültige Telefonnummer ein (7-20
+                      Zeichen)
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -189,24 +349,48 @@ function Register() {
                     </div>
                   </InputGroupAddon>
                 </InputGroup>
-                {!invalidPassword.passwordhasNumber &&
-                  showHint.PasswordFocused && (
-                    <p className="text-red-500 text-sm">
-                      Passwort braucht mindestens eine Nummer
-                    </p>
-                  )}
-                {!invalidPassword.passwordhasSpecialChar &&
-                  showHint.PasswordFocused && (
-                    <p className="text-red-500 text-sm">
-                      Passwort braucht mindestens ein Sonderzeichen
-                    </p>
-                  )}
-                {!invalidPassword.passwordminimum6Chars &&
-                  showHint.PasswordFocused && (
-                    <p className="text-red-500 text-sm">
-                      Passwort braucht mindestens 6 Zeichen
-                    </p>
-                  )}
+                <AnimatePresence>
+                  {!invalidPassword.passwordhasNumber &&
+                    showHint.PasswordFocused && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}
+                        className="text-red-500 text-sm"
+                      >
+                        Passwort braucht mindestens eine Nummer
+                      </motion.p>
+                    )}
+                </AnimatePresence>
+                <AnimatePresence>
+                  {!invalidPassword.passwordhasSpecialChar &&
+                    showHint.PasswordFocused && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}
+                        className="text-red-500 text-sm"
+                      >
+                        Passwort braucht mindestens ein Sonderzeichen
+                      </motion.p>
+                    )}
+                </AnimatePresence>
+                <AnimatePresence>
+                  {!invalidPassword.passwordminimum6Chars &&
+                    showHint.PasswordFocused && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}
+                        className="text-red-500 text-sm"
+                      >
+                        Passwort braucht mindestens 6 Zeichen
+                      </motion.p>
+                    )}
+                </AnimatePresence>
               </div>
             </div>
           </form>
@@ -230,7 +414,9 @@ function Register() {
           </Button>
           <div className="w-full flex justify-center">
             <Button variant="link" className="items-start">
-              <Link to="/login" className="underline">Bereits registriert? Zum Login</Link>
+              <Link to="/login" className="underline">
+                Bereits registriert? Zum Login
+              </Link>
             </Button>
           </div>
         </CardFooter>
