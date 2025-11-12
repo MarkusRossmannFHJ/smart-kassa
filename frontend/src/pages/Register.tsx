@@ -28,6 +28,9 @@ import {
   useInvalidUsername,
   type PASSWORD_VALIDATOR,
 } from "../hooks/useValidator";
+import { authContent } from "../content/auth";
+import { validationMessages } from "../content/validationMessages";
+import { toastMessages } from "../content/toastMessages";
 
 /**
  * To handle if user clicked in input field and focuses it
@@ -53,6 +56,10 @@ function Register() {
   const [firmenbuchnummer, setFirmenbuchnummer] = useState("");
   const [telefonnummer, setTelefonnummer] = useState("");
 
+  const r = authContent.register;
+  const v = validationMessages.register;
+  const t = toastMessages.register;
+
   const [showPassword, setShowPassword] = useState(false);
   // to show the user how to input valid data and in which input field
   const [showHint, setShowHint] = useState<showError>({
@@ -76,7 +83,7 @@ function Register() {
   useEffect(() => {
     if (!hasShownToast.current) {
       toast(
-        "Sie müssen sich Registrieren oder Einlogen bevor sie unser Service nutzen können",
+        t.error.title,
         {
           position: "top-center",
           closeButton: true,
@@ -106,19 +113,19 @@ function Register() {
           alt="Logo"
           className="mx-auto mb-2"
         ></img>
-        <CardHeader>
-          <CardTitle>Konto erstellen</CardTitle>
-          <CardDescription>Bitte erstellen Sie ein Konto</CardDescription>
+        <CardHeader className="text-center">
+          <CardTitle>{r.heading.title}</CardTitle>
+          <CardDescription>{r.heading.subtitle}</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="username">Name</Label>
+                <Label htmlFor="username">{r.labels.username}</Label>
                 <Input
                   id="username"
                   type="text"
-                  placeholder="John"
+                  placeholder={r.placeholders.username}
                   required
                   value={username}
                   className={
@@ -144,17 +151,17 @@ function Register() {
                       transition={{ duration: 0.3 }}
                       className="text-red-500 text-sm"
                     >
-                      Username darf nicht leer sein
+                      {v.username.required}
                     </motion.p>
                   )}
                 </AnimatePresence>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{r.labels.email}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder={r.placeholders.email}
                   required
                   value={email}
                   className={
@@ -180,17 +187,17 @@ function Register() {
                       transition={{ duration: 0.3 }}
                       className="text-red-500 text-sm"
                     >
-                      Bitte geben Sie eine gültige E-Mail-Adresse ein
+                      {v.email.invalid}
                     </motion.p>
                   )}
                 </AnimatePresence>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="ATU">ATU</Label>
+                <Label htmlFor="ATU">{r.labels.atu}</Label>
                 <Input
                   id="ATU"
                   type="text"
-                  placeholder="ATU12345678"
+                  placeholder={r.placeholders.atu}
                   required
                   value={atu}
                   className={
@@ -216,18 +223,17 @@ function Register() {
                       transition={{ duration: 0.3 }}
                       className="text-red-500 text-sm"
                     >
-                      Bitte geben Sie eine gültige ATU-Nummer ein (Format:
-                      ATU12345678)
+                      {v.atu.invalid}
                     </motion.p>
                   )}
                 </AnimatePresence>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="FirmenBuchNummer">Firmenbuchnummer (FN)</Label>
+                <Label htmlFor="FirmenBuchNummer">{r.labels.fn}</Label>
                 <Input
                   id="FirmenBuchNummer"
                   type="text"
-                  placeholder="FN12345a"
+                  placeholder={r.placeholders.fn}
                   required
                   value={firmenbuchnummer}
                   className={
@@ -253,18 +259,17 @@ function Register() {
                       transition={{ duration: 0.3 }}
                       className="text-red-500 text-sm"
                     >
-                      Bitte geben Sie eine gültige Firmenbuchnummer ein (Format:
-                      FN12345a)
+                      {v.fn.invalid}
                     </motion.p>
                   )}
                 </AnimatePresence>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="Telefonnummer">Telefonnummer</Label>
+                <Label htmlFor="Telefonnummer">{r.labels.phone}</Label>
                 <Input
                   id="Telefonnummer"
                   type="tel"
-                  placeholder="+43 123 456789"
+                  placeholder={r.placeholders.phone}
                   required
                   value={telefonnummer}
                   className={
@@ -296,15 +301,14 @@ function Register() {
                       transition={{ duration: 0.3 }}
                       className="text-red-500 text-sm"
                     >
-                      Bitte geben Sie eine gültige Telefonnummer ein (7-20
-                      Zeichen)
+                      {v.phone.invalid}
                     </motion.p>
                   )}
                 </AnimatePresence>
               </div>
               <div className="grid gap-2">
-                  <Label htmlFor="password">Passwort</Label>
-                
+                <Label htmlFor="password">{r.labels.password}</Label>
+
                 <InputGroup
                   className={
                     (invalidPassword.passwordIsInvalid &&
@@ -317,7 +321,7 @@ function Register() {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     title="Über 6 Zeichen mit einer Zahl und einem Zeichen"
-                    placeholder="******"
+                    placeholder={r.placeholders.password}
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -352,7 +356,7 @@ function Register() {
                         transition={{ duration: 0.3 }}
                         className="text-red-500 text-sm"
                       >
-                        Passwort braucht mindestens eine Nummer
+                        {v.password.missingNumber}
                       </motion.p>
                     )}
                 </AnimatePresence>
@@ -366,7 +370,7 @@ function Register() {
                         transition={{ duration: 0.3 }}
                         className="text-red-500 text-sm"
                       >
-                        Passwort braucht mindestens ein Sonderzeichen
+                        {v.password.missingSymbol}
                       </motion.p>
                     )}
                 </AnimatePresence>
@@ -380,7 +384,7 @@ function Register() {
                         transition={{ duration: 0.3 }}
                         className="text-red-500 text-sm"
                       >
-                        Passwort braucht mindestens 6 Zeichen
+                        {v.password.tooShort}
                       </motion.p>
                     )}
                 </AnimatePresence>
@@ -393,29 +397,27 @@ function Register() {
             type="submit"
             className="w-full"
             onClick={() =>
-              toast("Registrierung erfolgreich! Sie werden weitergeleitet...", {
+              toast(t.success.title, {
                 position: "top-center",
                 closeButton: true,
               })
             }
             disabled={formUnvalid}
           >
-            Registrieren
+            {r.buttons.register}
           </Button>
           <Button variant="outline" className="w-full">
-            Anmelden mit Google
+            {r.buttons.google}
           </Button>
-           <div className="w-full flex justify-center mt-2">
-            <div className="text-center">
-              <div className="text-center text-sm text-muted-foreground">
-                <p>Haben Sie bereits ein Konto?</p>
-                <Link
-                  to="/login"
-                  className="font-extrabold underline hover:text-violet-400"
-                >
-                  Logen Sie sich ein!
-                </Link>
-              </div>
+          <div className="w-full flex justify-center mt-2 text-center">
+            <div className="text-sm text-muted-foreground">
+              <p>{r.footer.text}</p>
+              <Link
+                to="/login"
+                className="font-extrabold underline hover:text-violet-400"
+              >
+                {r.footer.link}
+              </Link>
             </div>
           </div>
         </CardFooter>

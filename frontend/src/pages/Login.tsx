@@ -24,6 +24,9 @@ import {
   useInvalidPassword,
   type PASSWORD_VALIDATOR,
 } from "../hooks/useValidator";
+import { authContent } from "../content/auth";
+import { validationMessages } from "../content/validationMessages";
+import { toastMessages } from "../content/toastMessages";
 
 /**
  * To handle if user clicked in input field and focuses it
@@ -46,6 +49,10 @@ function Login() {
     IdentifierFocused: false,
     PasswordFocused: false,
   });
+
+  const l = authContent.login;
+  const v = validationMessages.login;
+  const t = toastMessages.login;
 
   const hasShownToast = useRef(false);
 
@@ -76,13 +83,13 @@ function Login() {
     console.log(isLoginSuccessful);
 
     if (isLoginSuccessful) {
-      toast("Login erfolgreich! Sie werden weitergeleitet...", {
+      toast(t.success.title, {
         position: "top-center",
         closeButton: true,
       });
     } else {
       toast(
-        "Login war nicht erfolgreich! Bitte kontrollieren Sie ihre Daten...",
+        t.error.title,
         {
           position: "top-center",
           closeButton: true,
@@ -94,7 +101,7 @@ function Login() {
   useEffect(() => {
     if (!hasShownToast.current) {
       toast(
-        "Sie müssen sich Registrieren oder Einlogen bevor sie unser Service nutzen können",
+        t.warning.title,
         {
           position: "top-center",
           closeButton: true,
@@ -123,18 +130,18 @@ function Login() {
           className="mx-auto mb-2"
         ></img>
         <CardHeader className="text-center">
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Bitte logen Sie sich ein</CardDescription>
+          <CardTitle>{l.heading.title}</CardTitle>
+          <CardDescription>{l.heading.subtitle}</CardDescription>
         </CardHeader>
         <CardContent>
           <form>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="identifier">Username or email</Label>
+                <Label htmlFor="identifier">{l.labels.identifier}</Label>
                 <Input
                   id="identifier"
                   type="text"
-                  placeholder="John or m@example.com"
+                  placeholder={l.placeholders.identifier}
                   required
                   value={identifier}
                   className={
@@ -166,19 +173,19 @@ function Login() {
                       transition={{ duration: 0.3 }}
                       className="text-red-500 text-sm"
                     >
-                      Dieses Feld darf nicht leer sein
+                      {v.identifier.required}
                     </motion.p>
                   )}
                 </AnimatePresence>
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Passwort</Label>
+                  <Label htmlFor="password">{l.labels.password}</Label>
                   <a
                     href="#"
                     className="ml-auto inline-block text-sm text-muted-foreground font-extrabold underline hover:text-violet-400"
                   >
-                    Passwort vergessen?
+                    {l.links.forgotPassword}
                   </a>
                 </div>
                 <InputGroup
@@ -193,7 +200,7 @@ function Login() {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     title="Über 6 Zeichen mit einer Zahl und einem Zeichen"
-                    placeholder="******"
+                    placeholder={l.placeholders.password}
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -228,7 +235,7 @@ function Login() {
                         transition={{ duration: 0.3 }}
                         className="text-red-500 text-sm"
                       >
-                        Passwort braucht mindestens 6 Zeichen
+                        {v.password.tooShort}
                       </motion.p>
                     )}
                 </AnimatePresence>
@@ -245,20 +252,20 @@ function Login() {
             }}
             disabled={formUnvalid}
           >
-            Login
+            {l.buttons.login}
           </Button>
           <Button variant="outline" className="w-full">
-            Anmelden mit Google
+            {l.buttons.google}
           </Button>
           <div className="w-full flex justify-center mt-2 text-center">
             
               <div className="text-sm text-muted-foreground">
-                <p>Noch kein Konto?</p>
+                <p>{l.footer.text}</p>
                 <Link
                   to="/register"
                   className="font-extrabold underline hover:text-violet-400"
                 >
-                  Registrieren Sie sich!
+                  {l.footer.link}
                 </Link>
               </div>
           </div>
