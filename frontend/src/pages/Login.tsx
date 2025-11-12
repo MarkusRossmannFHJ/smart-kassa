@@ -17,6 +17,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "../components/ui/input-group";
+import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeClosed } from "lucide-react";
 import {
   useInvalidEmail,
@@ -109,11 +110,19 @@ function Login() {
     invalidIdentifier || !invalidPassword.passwordminimum6Chars;
 
   return (
-    <main className="w-screen h-screen flex justify-center items-center bg-zinc-200 dark:bg-black">
-      <Card className="w-11/12 max-w-sm py-4 px-2">
-      <img src="Logo.png" width={220} height={220} alt="Logo" 
-      className="mx-auto mb-2"></img>
-        <CardHeader className="text-center mb-10">
+    <main
+      className="min-w-screen min-h-screen flex justify-center items-center bg-zinc-200
+     dark:bg-black overflow-y-auto scrollbar-hide"
+    >
+      <Card className="w-11/12 max-w-sm my-5 dark:bg-zinc-900 pt-4">
+        <img
+          src="Logo.png"
+          width={220}
+          height={220}
+          alt="Logo"
+          className="mx-auto mb-2"
+        ></img>
+        <CardHeader className="text-center">
           <CardTitle>Login</CardTitle>
           <CardDescription>Bitte logen Sie sich ein</CardDescription>
         </CardHeader>
@@ -148,11 +157,19 @@ function Login() {
                     }))
                   }
                 />
-                {invalidIdentifier && showHint.IdentifierFocused && (
-                  <p className="text-red-500 text-sm">
-                    Dieses Feld darf nicht leer sein
-                  </p>
-                )}
+                <AnimatePresence>
+                  {invalidIdentifier && showHint.IdentifierFocused && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-red-500 text-sm"
+                    >
+                      Dieses Feld darf nicht leer sein
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -201,12 +218,20 @@ function Login() {
                     </div>
                   </InputGroupAddon>
                 </InputGroup>
-                {!invalidPassword.passwordminimum6Chars &&
-                  showHint.PasswordFocused && (
-                    <p className="text-red-500 text-sm">
-                      Passwort braucht mindestens 6 Zeichen
-                    </p>
-                  )}
+                <AnimatePresence>
+                  {!invalidPassword.passwordminimum6Chars &&
+                    showHint.PasswordFocused && (
+                      <motion.p
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}
+                        className="text-red-500 text-sm"
+                      >
+                        Passwort braucht mindestens 6 Zeichen
+                      </motion.p>
+                    )}
+                </AnimatePresence>
               </div>
             </div>
           </form>
@@ -225,9 +250,9 @@ function Login() {
           <Button variant="outline" className="w-full">
             Anmelden mit Google
           </Button>
-          <div className="w-full flex justify-center mt-2">
-            <div className="text-center">
-              <div className="text-center text-sm text-muted-foreground">
+          <div className="w-full flex justify-center mt-2 text-center">
+            
+              <div className="text-sm text-muted-foreground">
                 <p>Noch kein Konto?</p>
                 <Link
                   to="/register"
@@ -236,7 +261,6 @@ function Login() {
                   Registrieren Sie sich!
                 </Link>
               </div>
-            </div>
           </div>
         </CardFooter>
       </Card>
