@@ -2,9 +2,9 @@ import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { describe, it, expect } from "vitest";
 import { MemoryRouter } from "react-router-dom";
-import { authContent } from "../content/auth";
+import { authContent } from "../content/auth/auth";
 import userEvent from "@testing-library/user-event";
-import { validationMessages } from "../content/validationMessages";
+import { validationMessages } from "../content/auth/validationMessages";
 import Login from "./Login";
 
 describe("Login", () => {

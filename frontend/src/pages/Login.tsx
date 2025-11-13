@@ -24,9 +24,9 @@ import {
   useInvalidPassword,
   type PASSWORD_VALIDATOR,
 } from "../hooks/useValidator";
-import { authContent } from "../content/auth";
-import { validationMessages } from "../content/validationMessages";
-import { toastMessages } from "../content/toastMessages";
+import { authContent } from "../content/auth/auth";
+import { validationMessages } from "../content/auth/validationMessages";
+import { toastMessages } from "../content/auth/toastMessages";
 
 /**
  * To handle if user clicked in input field and focuses it
