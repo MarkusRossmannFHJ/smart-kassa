@@ -4,12 +4,11 @@ export const validationMessages = {
   login: {
     identifier: {
       invalid:
-        "Bitte geben Sie einen gültigen Benutzernamen oder eine E-Mail-Adresse ein",
-         required: "Benutzername / Username darf nicht leer sein",
+        "Bitte geben Sie einen gültigen Benutzernamen oder E-Mail-Adresse ein",
     },
     password: {
-      tooShort: "Passwort braucht mindestens 6 Zeichen",
-      invalidFormat:
+      tooShort: "Das Passwort muss mindestens 6 Zeichen enthalten",
+      invalid:
         "Das Passwort muss mindestens eine Zahl und ein Sonderzeichen enthalten",
     },
   },
@@ -17,7 +16,7 @@ export const validationMessages = {
   // 🔸 Register-bezogene Fehler
   register: {
     username: {
-      required: "Benutzername darf nicht leer sein",
+      invalid: "Benutzername darf nicht leer sein",
       tooShort: "Der Benutzername muss mindestens 3 Zeichen lang sein",
     },
     email: {
@@ -36,8 +35,7 @@ export const validationMessages = {
       tooShort: "Das Passwort muss mindestens 6 Zeichen enthalten",
       missingNumber: "Das Passwort muss mindestens eine Zahl enthalten",
       missingSymbol:
-        "Das Passwort muss mindestens ein Sonderzeichen enthalten",
-      mismatch: "Die Passwörter stimmen nicht überein",
+        "Das Passwort muss mindestens ein Sonderzeichen enthalten"
     },
   },
 } as const

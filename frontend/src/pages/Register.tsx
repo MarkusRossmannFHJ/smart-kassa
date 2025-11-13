@@ -151,7 +151,7 @@ function Register() {
                       transition={{ duration: 0.3 }}
                       className="text-red-500 text-sm"
                     >
-                      {v.username.required}
+                      {v.username.invalid}
                     </motion.p>
                   )}
                 </AnimatePresence>
@@ -336,6 +336,7 @@ function Register() {
                   <InputGroupAddon align="inline-end">
                     <div
                       onClick={() => setShowPassword((prev) => !prev)}
+                      data-testid="password-toggle"
                       className="cursor-pointer"
                     >
                       {showPassword ? (
