@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cors());
 
 const pool = new pg.Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: process.env.DATABASE_PUBLIC_URL,
     ssl: { rejectUnauthorized: false },
 });
 
@@ -48,6 +48,10 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.listen(process.env.PGPORT || 3000, () =>
-    console.log(`Server running on port: ${process.env.PGPORT || 3000}`)
+app.listen(process.env.PORT || 3000, () =>
+    console.log(`Server running on port: ${process.env.PORT || 3000}`)
 );
+
+app.get("/", (req, res) => {
+    res.send("Server running ...");
+})
