@@ -11,7 +11,7 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { toast } from "sonner";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -31,6 +31,9 @@ import {
 import { authContent } from "../content/auth";
 import { validationMessages } from "../content/validationMessages";
 import { toastMessages } from "../content/toastMessages";
+import type { AppDispatch, RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { useWarningToast } from "../hooks/useToast";
 
 /**
  * To handle if user clicked in input field and focuses it
@@ -71,8 +74,6 @@ function Register() {
     TelefonnummerFocused: false,
   });
 
-  const hasShownToast = useRef(false);
-
   const invalidUsername = useInvalidUsername(username);
   const invalidEmail = useInvalidEmail(email);
   const invalidATU = useInvalidATU(atu);
@@ -80,16 +81,11 @@ function Register() {
   const invalidTelefonNumber = useInvalidTelefonnummer(telefonnummer);
   const invalidPassword: PASSWORD_VALIDATOR = useInvalidPassword(password);
 
-  useEffect(() => {
-    if (!hasShownToast.current) {
-      toast(t.warning.title, {
-        position: "top-center",
-        closeButton: true,
-        duration: 3000,
-      });
-      hasShownToast.current = true;
-    }
-  }, []);
+  // Redux States and Dispatches
+  const toastState = useSelector((state: RootState) => state.toastState);
+  const dispatch: AppDispatch = useDispatch();
+
+  useWarningToast(toastState.showWarning, t.warning.title, dispatch);
 
   //Form Validator, so the username is not empty, the email is not unvalid and the password is min. 6 chars long, one Special char and one Digit
   const formUnvalid =

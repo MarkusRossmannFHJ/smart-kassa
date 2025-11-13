@@ -22,7 +22,7 @@ function App() {
           }
         />
         <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login></Login>} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       <footer className="fixed bottom-3 right-2">
         <ModeToggle />

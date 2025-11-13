@@ -11,7 +11,7 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { toast } from "sonner";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -27,6 +27,9 @@ import {
 import { authContent } from "../content/auth";
 import { validationMessages } from "../content/validationMessages";
 import { toastMessages } from "../content/toastMessages";
+import { useWarningToast } from "../hooks/useToast";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState, AppDispatch } from "../../redux/store";
 
 /**
  * To handle if user clicked in input field and focuses it
@@ -54,7 +57,9 @@ function Login() {
   const v = validationMessages.login;
   const t = toastMessages.login;
 
-  const hasShownToast = useRef(false);
+  // Redux States and Dispatches
+  const toastState = useSelector((state: RootState) => state.toastState);
+  const dispatch: AppDispatch = useDispatch();
 
   const invalidIdentifier = identifier === "";
   const invalidPassword: PASSWORD_VALIDATOR = useInvalidPassword(password);
@@ -88,29 +93,14 @@ function Login() {
         closeButton: true,
       });
     } else {
-      toast(
-        t.error.title,
-        {
-          position: "top-center",
-          closeButton: true,
-        }
-      );
+      toast(t.error.title, {
+        position: "top-center",
+        closeButton: true,
+      });
     }
   }
 
-  useEffect(() => {
-    if (!hasShownToast.current) {
-      toast(
-        t.warning.title,
-        {
-          position: "top-center",
-          closeButton: true,
-          duration: 3000,
-        }
-      );
-      hasShownToast.current = true;
-    }
-  }, []);
+  useWarningToast(toastState.showWarning, t.warning.title, dispatch);
 
   //Form Validator, so the username is not empty, the email is not unvalid and the password is min. 6 chars long, one Special char and one Digit
   const formUnvalid =
@@ -258,16 +248,15 @@ function Login() {
             {l.buttons.google}
           </Button>
           <div className="w-full flex justify-center mt-2 text-center">
-            
-              <div className="text-sm text-muted-foreground">
-                <p>{l.footer.text}</p>
-                <Link
-                  to="/register"
-                  className="font-extrabold underline hover:text-violet-400"
-                >
-                  {l.footer.link}
-                </Link>
-              </div>
+            <div className="text-sm text-muted-foreground">
+              <p>{l.footer.text}</p>
+              <Link
+                to="/register"
+                className="font-extrabold underline hover:text-violet-400"
+              >
+                {l.footer.link}
+              </Link>
+            </div>
           </div>
         </CardFooter>
       </Card>
