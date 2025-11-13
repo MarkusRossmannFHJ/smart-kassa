@@ -8,6 +8,7 @@ import { useState } from "react";
  * @returns the Root layout
  */
 export default function RootLayout() {
+  // to know which path is active for the underline in the footer
   const [path, setPath] = useState("home");
 
   return (
