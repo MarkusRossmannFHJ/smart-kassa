@@ -1,6 +1,6 @@
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Card,
   CardHeader,
@@ -10,7 +10,6 @@ import {
   CardFooter,
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
-import { toast } from "sonner";
 import { useState } from "react";
 import {
   InputGroup,
@@ -34,6 +33,10 @@ import { toastMessages } from "../content/toastMessages";
 import type { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useWarningToast } from "../hooks/useToast";
+import { toast } from "sonner";
+import { MockAuth } from "../utils/mockAuth";
+import { signInUser } from "../../redux/slices/userSlice";
+import { AuthStorage } from "../utils/auth";
 
 /**
  * To handle if user clicked in input field and focuses it
@@ -50,8 +53,11 @@ interface showError {
 /**
  * The Sign Up page, where users Sign Up
  * @returns Register Page where Users can Sign Up
+ * @author Casper Zielinski
+ * @author Umejr Dzinovicz
  */
 function Register() {
+  // useState Hooks for the Form
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -59,6 +65,11 @@ function Register() {
   const [firmenbuchnummer, setFirmenbuchnummer] = useState("");
   const [telefonnummer, setTelefonnummer] = useState("");
 
+  const navigate = useNavigate();
+  // test JWT Tocken
+  const MOCK_MODE = true;
+
+  // Constant Values for Messages for the User
   const r = authContent.register;
   const v = validationMessages.register;
   const t = toastMessages.register;
@@ -74,6 +85,7 @@ function Register() {
     TelefonnummerFocused: false,
   });
 
+  // invalid... returns true if used value is invalid
   const invalidUsername = useInvalidUsername(username);
   const invalidEmail = useInvalidEmail(email);
   const invalidATU = useInvalidATU(atu);
@@ -85,6 +97,7 @@ function Register() {
   const toastState = useSelector((state: RootState) => state.toastState);
   const dispatch: AppDispatch = useDispatch();
 
+  // to show the User that he has to log in to use the app
   useWarningToast(toastState.showWarning, t.warning.title, dispatch);
 
   //Form Validator, so the username is not empty, the email is not unvalid and the password is min. 6 chars long, one Special char and one Digit
@@ -95,6 +108,54 @@ function Register() {
     invalidATU ||
     invalidFN ||
     invalidTelefonNumber;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    toast(t.success.title, {
+      position: "top-center",
+      closeButton: true,
+    });
+
+    if (MOCK_MODE) {
+      // ✅ Simuliere Backend Validierung
+      if (password.length < 6) {
+        toast.error("Password muss mindestens 6 Zeichen haben");
+        return;
+      }
+
+      if (!email.includes("@")) {
+        toast.error("Ungültige Email");
+        return;
+      }
+
+      // ✅ Simuliere "Email bereits registriert"
+      if (email === "admin@smartkasse.at") {
+        toast.error("Email bereits registriert");
+        return;
+      }
+
+      // ✅ Simuliere kurze Delay (wie echtes Backend)
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      const mockToken = MockAuth.generateToken({
+        name: username,
+        email: email,
+        phoneNumber: telefonnummer,
+      });
+      AuthStorage.setTokens(mockToken);
+      dispatch(
+        signInUser({
+          firstName: username.split(" ")[0],
+          lastName: username.split(" ")[1],
+          email: email,
+          phoneNumber: telefonnummer,
+        })
+      );
+      toast.success("Registrierung erfolgreich");
+      navigate("/");
+      return;
+    }
+  };
 
   return (
     <main className="min-w-screen min-h-screen flex justify-center items-center bg-zinc-200 dark:bg-black overflow-y-auto scrollbar-hide">
@@ -110,8 +171,8 @@ function Register() {
           <CardTitle>{r.heading.title}</CardTitle>
           <CardDescription>{r.heading.subtitle}</CardDescription>
         </CardHeader>
-        <CardContent>
-          <form>
+        <form onSubmit={handleSubmit}>
+          <CardContent>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="username">{r.labels.username}</Label>
@@ -383,37 +444,27 @@ function Register() {
                 </AnimatePresence>
               </div>
             </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex-col gap-2">
-          <Button
-            type="submit"
-            className="w-full"
-            onClick={() =>
-              toast(t.success.title, {
-                position: "top-center",
-                closeButton: true,
-              })
-            }
-            disabled={formUnvalid}
-          >
-            {r.buttons.register}
-          </Button>
-          <Button variant="outline" className="w-full">
-            {r.buttons.google}
-          </Button>
-          <div className="w-full flex justify-center mt-2 text-center">
-            <div className="text-sm text-muted-foreground">
-              <p>{r.footer.text}</p>
-              <Link
-                to="/login"
-                className="font-extrabold underline hover:text-violet-400"
-              >
-                {r.footer.link}
-              </Link>
+          </CardContent>
+          <CardFooter className="flex-col gap-2">
+            <Button type="submit" className="w-full" disabled={formUnvalid}>
+              {r.buttons.register}
+            </Button>
+            <Button type="button" variant="outline" className="w-full">
+              {r.buttons.google}
+            </Button>
+            <div className="w-full flex justify-center mt-2 text-center">
+              <div className="text-sm text-muted-foreground">
+                <p>{r.footer.text}</p>
+                <Link
+                  to="/login"
+                  className="font-extrabold underline hover:text-violet-400"
+                >
+                  {r.footer.link}
+                </Link>
+              </div>
             </div>
-          </div>
-        </CardFooter>
+          </CardFooter>
+        </form>
       </Card>
     </main>
   );

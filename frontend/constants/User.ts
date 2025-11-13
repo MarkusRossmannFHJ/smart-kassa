@@ -1,0 +1,16 @@
+// User table in Database
+export interface USER {
+  user_id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_number: string;
+}
+
+// The Data we are going to send
+export interface USER_DTO {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+}
