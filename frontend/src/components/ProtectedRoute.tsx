@@ -10,6 +10,14 @@ interface ProtectedRouteProps {
  * @returns
  */
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+
+  //To be able to test the homepage
+  const DISABLED = true; // <-- nur hier ändern
+
+  if (DISABLED) {
+    return <>{children}</>;
+  }
+
   // Überprüfen, ob der User eingeloggt ist
   // Kann man später mit einem Auth-Context oder localStorage machen
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
@@ -21,3 +29,4 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   return <>{children}</>;
 };
+
