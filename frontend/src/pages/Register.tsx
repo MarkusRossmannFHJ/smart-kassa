@@ -82,14 +82,11 @@ function Register() {
 
   useEffect(() => {
     if (!hasShownToast.current) {
-      toast(
-        t.error.title,
-        {
-          position: "top-center",
-          closeButton: true,
-          duration: 3000,
-        }
-      );
+      toast(t.warning.title, {
+        position: "top-center",
+        closeButton: true,
+        duration: 3000,
+      });
       hasShownToast.current = true;
     }
   }, []);
