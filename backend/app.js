@@ -24,7 +24,7 @@ app.use("/login", loginRoutes);
 
 // HealthCheck
 app.get("/", (_, res) => {
-  res.send("SmartKasse API - Server running");
+  res.send("SmartKassa API - Server running");
 });
 
 // Error handling for routes that are not found
