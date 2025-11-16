@@ -6,7 +6,7 @@ import { generateAccessToken, verifyRefreshToken } from "../utils/jwt.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const { refreshToken } = req.body;
+  const refreshToken = req.cookies.refreshToken;
 
   if (!refreshToken) {
     return res.status(401).json({ error: "Refresh token required" });
