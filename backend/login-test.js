@@ -1,12 +1,13 @@
 import pg from "pg";
 import dotenv from "dotenv";
+import pool from "../backend/db.js"
 
 dotenv.config();
 
-const pool = new pg.Pool({
-    connectionString: process.env.DATABASE_PUBLIC_URL,
-    ssl: { rejectUnauthorized: false },
-});
+// const pool = new pg.Pool({
+//     connectionString: process.env.DATABASE_PUBLIC_URL,
+//     ssl: { rejectUnauthorized: false },
+// });
 
 async function testDB() {
     try {

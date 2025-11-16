@@ -11,8 +11,7 @@ router.post("/", async (req, res) => {
     req.body;
 
   try {
-    // validate input (if missing fields or something wrong)
-
+    // validate input (if missing fields or something is wrong)
     if (!first_name || !last_name || !email || !password || !business) {
       return res.status(400).json({ error: "Missing required fields" });
     }
@@ -51,7 +50,7 @@ router.post("/", async (req, res) => {
       business: business,
     };
 
-    // generate JWT Token
+    // generate JWT token
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken({ userId: userId });
 

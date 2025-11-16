@@ -4,6 +4,7 @@ import cors from "cors";
 import helmet from "helmet";
 import refreshRoutes from "./routes/refresh.js";
 import registerRoutes from "./routes/register.js";
+import loginRoutes from "./routes/login.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -16,16 +17,17 @@ app.use(express.json());
 app.use(helmet());
 app.use(cookieParser());
 
-// ROUTES
+// Routes
 app.use("/refresh", refreshRoutes);
 app.use("/register", registerRoutes);
+app.use("/login", loginRoutes);
 
-// Health Check
+// HealthCheck
 app.get("/", (_, res) => {
   res.send("SmartKasse API - Server running");
 });
 
-// Error Handling for not found routes
+// Error handling for routes that are not found
 app.use((req, res) => {
   res.status(404).json({
     error: "Route not found",
@@ -36,5 +38,5 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 SmartKasse API running on port ${PORT}`);
+  console.log(`SmartKassa API running on port ${PORT}`);
 });

@@ -1,23 +1,11 @@
 import express from "express";
-import pg from "pg";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-import cors from "cors";
+import pool from "../db.js";
 
-dotenv.config();
+const router = express.Router();
 
-const app = express();
-app.use(express.json());
-app.use(cors());
-
-const pool = new pg.Pool({
-    connectionString: process.env.DATABASE_PUBLIC_URL,
-    ssl: { rejectUnauthorized: false },
-});
-
-// Was habt ihr im Frontend als feld bei name und password?
-app.post("/login", async (req, res) => {
+router.post("/", async (req, res) => {
     const { name, password } = req.body;
 
     try {
@@ -48,10 +36,8 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.listen(process.env.PORT || 3000, () =>
-    console.log(`Server running on port: ${process.env.PORT || 3000}`)
-);
-
-app.get("/", (req, res) => {
+router.get("/", (req, res) => {
     res.send("Server running ...");
 })
+
+export default router;
