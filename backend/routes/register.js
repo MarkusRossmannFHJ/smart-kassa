@@ -36,7 +36,7 @@ router.post("/", async (req, res) => {
     req.body;
 
   try {
-    // Validate required fields
+    // validate input (if missing fields or something is wrong)
     if (!first_name || !last_name || !email || !password || !business) {
       return res.status(400).json({ error: "Missing required fields" });
     }

@@ -20,6 +20,7 @@ import cors from "cors";
 import helmet from "helmet";
 import refreshRoutes from "./routes/refresh.js";
 import registerRoutes from "./routes/register.js";
+import loginRoutes from "./routes/login.js";
 import cookieParser from "cookie-parser";
 
 // Load environment variables from .env file
@@ -53,8 +54,9 @@ app.use(cookieParser());
  * API Routes
  * All routes are prefixed with their endpoint path
  */
-app.use("/refresh", refreshRoutes); // Token refresh endpoint
-app.use("/register", registerRoutes); // User registration endpoint
+app.use("/refresh", refreshRoutes);
+app.use("/register", registerRoutes);
+app.use("/login", loginRoutes);
 
 /**
  * Health Check Endpoint
@@ -81,5 +83,5 @@ app.use((req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 SmartKasse API running on port ${PORT}`);
+  console.log(`SmartKassa API running on port ${PORT}`);
 });
