@@ -1,3 +1,19 @@
+/**
+ * SmartKasse Backend Application
+ * Main entry point for the Express API server
+ *
+ * This file configures the Express application with middleware,
+ * routes, and error handling for the SmartKasse point-of-sale system
+ *
+ * @example
+ * // Adding a new API endpoint
+ * import newRoutes from "./routes/new.js";
+ * app.use("/new", newRoutes);
+ *
+ * @author Casper Zielinski
+ * @author Mario Shenouda
+ */
+
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -7,27 +23,52 @@ import registerRoutes from "./routes/register.js";
 import loginRoutes from "./routes/login.js";
 import cookieParser from "cookie-parser";
 
+// Load environment variables from .env file
 dotenv.config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+/**
+ * Middleware Configuration
+ * Applied in order to all incoming requests
+ */
+
+// CORS - Allow frontend to make requests with credentials
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173", // Frontend URL
+    credentials: true, // Allow cookies to be sent
+  })
+);
+
+// Parse incoming JSON request bodies
 app.use(express.json());
+
+// Helmet - Set security-related HTTP headers
 app.use(helmet());
+
+// Cookie Parser - Parse cookies from request headers
 app.use(cookieParser());
 
-// Routes
+/**
+ * API Routes
+ * All routes are prefixed with their endpoint path
+ */
 app.use("/refresh", refreshRoutes);
 app.use("/register", registerRoutes);
 app.use("/login", loginRoutes);
 
-// HealthCheck
+/**
+ * Health Check Endpoint
+ * Used to verify the server is running
+ * @route GET /
+ * @access Public
+ */
 app.get("/", (_, res) => {
   res.send("SmartKassa API - Server running");
 });
 
-// Error handling for routes that are not found
+// Error Handling for not found routes
 app.use((req, res) => {
   res.status(404).json({
     error: "Route not found",
@@ -35,6 +76,7 @@ app.use((req, res) => {
   });
 });
 
+// Server Configuration
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
