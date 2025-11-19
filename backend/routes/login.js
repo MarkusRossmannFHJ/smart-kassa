@@ -22,7 +22,7 @@ const router = express.Router();
  *
  * @route POST /login
  * @access Public
- * @body {string} name - User's account name (required)
+ * @body {string} email - User's email (required)
  * @body {string} password - User's password (required)
  * @returns {Object} 200 - Login successful with access token and user info
  * @returns {Object} 400 - User not found
