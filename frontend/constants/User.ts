@@ -1,4 +1,7 @@
 // User table in Database
+/**
+ * Full User Data (like the Table)
+ */
 export interface USER {
   user_id: number;
   first_name: string;
@@ -8,6 +11,9 @@ export interface USER {
 }
 
 // The Data we are going to send
+/**
+ * User Data that we will put in redux State
+ */
 export interface USER_DTO {
   firstName: string;
   lastName: string;

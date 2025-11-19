@@ -30,8 +30,8 @@ export const authContent = {
     placeholders: {
       username: "John18",
       email: "beispiel@domain.at",
-      atu: "ATU12345678",
-      fn: "FN12345a",
+      atu: "ATU123456789",
+      fn: "FN123456a",
       phone: "+43 660 1234567",
       password: shared.placeholders.password,
     },

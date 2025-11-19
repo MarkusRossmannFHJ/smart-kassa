@@ -8,7 +8,7 @@ export const validationMessages = {
          required: "Benutzername / Username darf nicht leer sein",
     },
     password: {
-      tooShort: "Passwort braucht mindestens 6 Zeichen",
+      tooShort: "Passwort braucht mindestens 8 Zeichen",
       invalidFormat:
         "Das Passwort muss mindestens eine Zahl und ein Sonderzeichen enthalten",
     },
@@ -24,20 +24,20 @@ export const validationMessages = {
       invalid: "Bitte geben Sie eine gültige E-Mail-Adresse ein",
     },
     atu: {
-      invalid: "Bitte geben Sie eine gültige Umsatzsteuer-ID (ATU) ein (Format: ATU12345678)",
+      invalid: "Bitte geben Sie eine gültige Umsatzsteuer-ID (ATU) ein (Format: ATU123456789)",
     },
     fn: {
-      invalid: "Bitte geben Sie eine gültige Firmenbuchnummer (FN) ein (Format:FN12345a)",
+      invalid: "Bitte geben Sie eine gültige Firmenbuchnummer (FN) ein (Format:FN123456a)",
     },
     phone: {
       invalid: "Bitte geben Sie eine gültige Telefonnummer ein (7-20 Zeichen)",
     },
     password: {
-      tooShort: "Das Passwort muss mindestens 6 Zeichen enthalten",
+      tooShort: "Das Passwort muss mindestens 8 Zeichen enthalten",
       missingNumber: "Das Passwort muss mindestens eine Zahl enthalten",
       missingSymbol:
         "Das Passwort muss mindestens ein Sonderzeichen enthalten",
-      mismatch: "Die Passwörter stimmen nicht überein",
+      missingUpperCaseLetter: "Das Passwort muss mindestesn ein großen Buchstaben enthalten"  
     },
   },
 } as const

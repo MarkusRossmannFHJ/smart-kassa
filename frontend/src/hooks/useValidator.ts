@@ -21,7 +21,7 @@ export const useInvalidPassword = (password: string) => {
     password
   );
   const passwordhasNumber = /[0-9]/.test(password);
-  const passwordminimum6Chars = password.length >= 6;
+  const passwordminimum6Chars = password.length >= 8;
   const passwordIsInvalid =
     !passwordminimum6Chars || !passwordhasNumber || !passwordhasSpecialChar;
   const passwordInvalidData: PASSWORD_VALIDATOR = {
@@ -35,19 +35,19 @@ export const useInvalidPassword = (password: string) => {
 };
 
 export const useInvalidATU = (atu: string) => {
-  const atuIsInvalid = atu === "" || !/^ATU\d{8}$/.test(atu);
+  const cleaned = atu.trim().replace(/[\s/]/g, "");
+
+  const atuIsInvalid = atu === "" || !/^ATU\d{9}$/.test(cleaned);
   return atuIsInvalid;
 };
 
 export const useInvalidFirmenbuchnummer = (fn: string) => {
-  const fnIsInvalid = fn === "" || !/^FN\d{1,6}[a-z]?$/i.test(fn);
+  const fnIsInvalid = fn === "" || !/^FN\d{6}[a-z]$/.test(fn);
   return fnIsInvalid;
 };
 
 export const useInvalidTelefonnummer = (telefon: string) => {
   const telefonIsInvalid =
-    telefon === "" ||
-    !/^[\d\s+()-]{7,20}$/.test(telefon) ||
-    telefon.length < 7;
+    telefon === "" || !/^[\d\s+()-]{7,20}$/.test(telefon) || telefon.length < 7;
   return telefonIsInvalid;
 };

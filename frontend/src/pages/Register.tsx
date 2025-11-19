@@ -1,6 +1,6 @@
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Card,
   CardHeader,
@@ -33,10 +33,6 @@ import { toastMessages } from "../content/toastMessages";
 import type { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useWarningToast } from "../hooks/useToast";
-import { toast } from "sonner";
-import { MockAuth } from "../utils/mockAuth";
-import { signInUser } from "../../redux/slices/userSlice";
-import { AuthStorage } from "../utils/auth";
 
 /**
  * To handle if user clicked in input field and focuses it
@@ -65,9 +61,7 @@ function Register() {
   const [firmenbuchnummer, setFirmenbuchnummer] = useState("");
   const [telefonnummer, setTelefonnummer] = useState("");
 
-  const navigate = useNavigate();
-  // test JWT Tocken
-  const MOCK_MODE = true;
+  // const navigate = useNavigate();
 
   // Constant Values for Messages for the User
   const r = authContent.register;
@@ -111,50 +105,6 @@ function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast(t.success.title, {
-      position: "top-center",
-      closeButton: true,
-    });
-
-    if (MOCK_MODE) {
-      // ✅ Simuliere Backend Validierung
-      if (password.length < 6) {
-        toast.error("Password muss mindestens 6 Zeichen haben");
-        return;
-      }
-
-      if (!email.includes("@")) {
-        toast.error("Ungültige Email");
-        return;
-      }
-
-      // ✅ Simuliere "Email bereits registriert"
-      if (email === "admin@smartkasse.at") {
-        toast.error("Email bereits registriert");
-        return;
-      }
-
-      // ✅ Simuliere kurze Delay (wie echtes Backend)
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      const mockToken = MockAuth.generateToken({
-        name: username,
-        email: email,
-        phoneNumber: telefonnummer,
-      });
-      AuthStorage.setTokens(mockToken);
-      dispatch(
-        signInUser({
-          firstName: username.split(" ")[0],
-          lastName: username.split(" ")[1],
-          email: email,
-          phoneNumber: telefonnummer,
-        })
-      );
-      toast.success("Registrierung erfolgreich");
-      navigate("/");
-      return;
-    }
   };
 
   return (

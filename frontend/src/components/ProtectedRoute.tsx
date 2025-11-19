@@ -1,4 +1,10 @@
-import { Navigate } from "react-router-dom";
+import { verifyAccessToken } from "../utils/jwttokens";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "../../redux/store";
+import { signInUser } from "../../redux/slices/userSlice";
+import type { USER_DTO } from "../../constants/User";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -12,12 +18,28 @@ interface ProtectedRouteProps {
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   // Überprüfen, ob der User eingeloggt ist
   // Kann man später mit einem Auth-Context oder localStorage machen
-  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  const dispatch: AppDispatch = useDispatch();
+  const navigator = useNavigate();
 
-  if (!isAuthenticated) {
-    // Redirect zum Login, wenn nicht authentifiziert
-    return <Navigate to="/register" replace />;
-  }
+  useEffect(() => {
+    async function getJWTTokens() {
+      try {
+        const userData: USER_DTO = await verifyAccessToken();
+        console.log(userData)
+        dispatch(
+          signInUser({
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            email: userData.email,
+            phoneNumber: userData.phoneNumber,
+          })
+        );
+      } catch {
+        navigator("/register");
+      }
+    }
+    getJWTTokens();
+  }, [dispatch, navigator]);
 
   return <>{children}</>;
 };
