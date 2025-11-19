@@ -14,19 +14,20 @@
  * @author Mario Shenouda
  */
 
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
-import helmet from "helmet";
-import refreshRoutes from "./routes/refresh.js";
-import registerRoutes from "./routes/register.js";
-import loginRoutes from "./routes/login.js";
-import cookieParser from "cookie-parser";
-
 // Load environment variables from .env file
 dotenv.config();
 
 const app = express();
+
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import refreshRoutes from "./routes/refresh.js";
+import registerRoutes from "./routes/register.js";
+import loginRoutes from "./routes/login.js";
+import verifyRoutes from "./routes/verify.js";
 
 /**
  * Middleware Configuration
@@ -57,6 +58,7 @@ app.use(cookieParser());
 app.use("/refresh", refreshRoutes);
 app.use("/register", registerRoutes);
 app.use("/login", loginRoutes);
+app.use("/verify", verifyRoutes);
 
 /**
  * Health Check Endpoint
