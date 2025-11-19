@@ -65,16 +65,16 @@ git commit -m "feat: adds user login"
 | **build:**    | Changes to the build system or dependencies               | Webpack, package updates                                  |
 
 ### Quick Commit Type Overview
-| Commit Type  | When to Use                                            |
-| ------------ | ------------------------------------------------------ |
-| **feat**     | You add a feature                                      |
-| **fix**      | You fix a bug                                          |
-| **docs**     | You change documentation                               |
-| **style**    | You change formatting or a harmless typo               |
-| **refactor** | You reorganize or improve code structure               |
-| **test**     | You add or modify tests                                |
-| **perf**     | You improve performance                                |
-| **chore**    | You change project configuration or housekeeping tasks |
-| **ci**       | You adjust CI/CD pipelines                             |
-| **build**    | You modify build processes or dependencies             |
+| Commit Type   | When to Use                                             |
+| ------------  | ------------------------------------------------------  |
+| **feat:**     | You add a feature                                      |
+| **fix:**      | You fix a bug                                          |
+| **docs:**     | You change documentation                               |
+| **style:**    | You change formatting or a harmless typo               |
+| **refactor:** | You reorganize or improve code structure               |
+| **test:**     | You add or modify tests                                |
+| **perf:**     | You improve performance                                |
+| **chore:**    | You change project configuration                       |
+| **ci:**       | You adjust CI/CD pipelines                             |
+| **build:**    | You modify build processes or dependencies             |
 
