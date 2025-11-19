@@ -2,7 +2,42 @@
 To ensure consistency and smooth collaboration across the project, all contributors are expected to follow the conventions and structures outlined below.
 
 ## Branch Strategy
-***TBD***
+Our branching strategy is structured into multiple layers to keep development clean and organized.
+
+We use the following main branches:
+
+- **main** – always stable, production-ready code  
+- **develop** – integration branch for all features before going to main  
+- **frontend** – collects all frontend feature branches  
+- **backend** – collects all backend feature branches  
+
+---
+
+### How Feature Development Works
+
+When adding a new feature — for example, a login page — each team creates a feature branch based on their area:
+
+- **Frontend:** `feature/frontend-login`  
+- **Backend:** `feature/backend-login`  
+
+Once the frontend developer completes the login page, the branch is merged into the **frontend** branch.  
+Another teammate might work on the register page (`feature/frontend-register`) and merge that into **frontend** as well.
+
+Inside the **frontend** branch, we ensure both features work smoothly together — for example, verifying that navigation between Login and Register works correctly.
+
+When everything is consistent, the **frontend** branch is merged into **develop**.
+
+The backend team follows the same process:  
+individual backend features → merged into **backend** → validated → then merged into **develop**.
+
+---
+
+### Final Integration
+
+Inside **develop**, we verify the complete interaction between frontend and backend.  
+If login and register work end-to-end and the whole system behaves as expected, the changes are merged into **main**.
+
+This approach ensures a clean and functional strategy from individual features all the way to stable code.
 
 ## Commit Messages
 Commit messages must always use the imperative form:
