@@ -35,8 +35,7 @@ router.post("/", async (req, res) => {
   try {
     // Query database for user account by email
     const result = await pool.query(
-      `
-      SELECT 
+      `SELECT 
         account.account_id,
         account.password_hash,
         users.id AS user_id,
@@ -44,8 +43,8 @@ router.post("/", async (req, res) => {
       FROM account
       JOIN users
         ON users.id = account.users_id
-      WHERE account.email = $1
-     `, [email]
+      WHERE account.email = $1`,
+      [email]
     );
 
     // Check if user exists
@@ -115,7 +114,7 @@ router.post("/", async (req, res) => {
  * @access Public
  */
 router.get("/", (req, res) => {
-  res.send("Server running ...");
+  res.send("Server running on route /login");
 });
 
 export default router;

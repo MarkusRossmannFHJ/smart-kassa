@@ -115,4 +115,14 @@ router.post("/", async (req, res) => {
   }
 });
 
+/**
+ * GET /register
+ * Health check endpoint for the register route
+ * @route GET /register
+ * @access Public
+ */
+router.get("/", (req, res) => {
+  res.send("Server running on route /register");
+});
+
 export default router;
