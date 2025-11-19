@@ -68,7 +68,10 @@ app.get("/", (_, res) => {
   res.send("SmartKassa API - Server running");
 });
 
-// Error Handling for not found routes
+/**
+ * 404 Handler
+ * Catches all unmatched routes and returns a 404 error
+ */
 app.use((req, res) => {
   res.status(404).json({
     error: "Route not found",
