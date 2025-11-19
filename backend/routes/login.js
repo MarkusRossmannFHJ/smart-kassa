@@ -28,21 +28,29 @@ const router = express.Router();
  * @returns {Object} 400 - User not found
  * @returns {Object} 401 - Invalid password
  * @returns {Object} 500 - Internal server error
- * @todo Decide whether to use email or name for login authentication
  */
 router.post("/", async (req, res) => {
-  const { name, password } = req.body;
+  const { email, password } = req.body;
 
   try {
-    // Query database for user account by name
+    // Query database for user account by email
     const result = await pool.query(
-      "SELECT account_id, password_hash FROM account WHERE name = $1",
-      [name]
+      `
+      SELECT 
+        account.account_id,
+        account.password_hash,
+        users.id AS user_id,
+        users.email
+      FROM account
+      JOIN users
+        ON users.id = account.users_id
+      WHERE account.email = $1
+     `, [email]
     );
 
     // Check if user exists
     if (result.rows.length === 0) {
-      return res.status(400).json({ error: "User not found" });
+      return res.status(400).json({ error: "Account not found" });
     }
 
     const user = result.rows[0];
