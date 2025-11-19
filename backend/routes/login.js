@@ -7,7 +7,6 @@
 
 import express from "express";
 import argon2 from "argon2";
-import jwt from "jsonwebtoken";
 import pool from "../db.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
 
@@ -29,6 +28,7 @@ const router = express.Router();
  * @returns {Object} 401 - Invalid password
  * @returns {Object} 500 - Internal server error
  */
+
 router.post("/", async (req, res) => {
   const { email, password } = req.body;
 
