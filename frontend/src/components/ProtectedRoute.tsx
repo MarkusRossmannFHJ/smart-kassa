@@ -25,9 +25,12 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     async function getJWTTokens() {
       try {
         const userData: USER_DTO = await verifyAccessToken();
-        console.log(userData)
+        if (!userData) {
+          throw new Error("User Data invalid");
+        }
         dispatch(
           signInUser({
+            id: userData.id,
             firstName: userData.firstName,
             lastName: userData.lastName,
             email: userData.email,

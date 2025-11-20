@@ -1,6 +1,6 @@
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Card,
   CardHeader,
@@ -33,12 +33,15 @@ import { toastMessages } from "../content/toastMessages";
 import type { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useWarningToast } from "../hooks/useToast";
+import { register } from "../utils/auth";
+import { toast } from "sonner";
 
 /**
  * To handle if user clicked in input field and focuses it
  */
 interface showError {
-  UsernameFocused: boolean;
+  Firstnamefocused: boolean;
+  LastnameFocused: boolean;
   EmailFocused: boolean;
   PasswordFocused: boolean;
   ATUFocused: boolean;
@@ -54,14 +57,15 @@ interface showError {
  */
 function Register() {
   // useState Hooks for the Form
-  const [username, setUsername] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastanme, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [atu, setAtu] = useState("");
   const [firmenbuchnummer, setFirmenbuchnummer] = useState("");
   const [telefonnummer, setTelefonnummer] = useState("");
 
-  // const navigate = useNavigate();
+  const navigator = useNavigate();
 
   // Constant Values for Messages for the User
   const r = authContent.register;
@@ -71,7 +75,8 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
   // to show the user how to input valid data and in which input field
   const [showHint, setShowHint] = useState<showError>({
-    UsernameFocused: false,
+    Firstnamefocused: false,
+    LastnameFocused: false,
     EmailFocused: false,
     PasswordFocused: false,
     ATUFocused: false,
@@ -80,7 +85,8 @@ function Register() {
   });
 
   // invalid... returns true if used value is invalid
-  const invalidUsername = useInvalidUsername(username);
+  const invalidFirstname = useInvalidUsername(firstname);
+  const invalidLastname = useInvalidUsername(lastanme);
   const invalidEmail = useInvalidEmail(email);
   const invalidATU = useInvalidATU(atu);
   const invalidFN = useInvalidFirmenbuchnummer(firmenbuchnummer);
@@ -96,7 +102,8 @@ function Register() {
 
   //Form Validator, so the username is not empty, the email is not unvalid and the password is min. 6 chars long, one Special char and one Digit
   const formUnvalid =
-    invalidUsername ||
+    invalidFirstname ||
+    invalidLastname ||
     invalidEmail ||
     invalidPassword.passwordIsInvalid ||
     invalidATU ||
@@ -105,6 +112,24 @@ function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    try {
+      const response = await register(
+        firstname,
+        lastanme,
+        email,
+        telefonnummer,
+        password,
+        "Businnes muss im Frontend implementiert werden",
+        dispatch // to set Global User Variable (Injected)
+      );
+
+      console.log(response.userId);
+      toast.success(t.success.title);
+      navigator("/");
+    } catch {
+      toast.error(t.error.title);
+    }
   };
 
   return (
@@ -125,29 +150,32 @@ function Register() {
           <CardContent>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="username">{r.labels.username}</Label>
+                <Label htmlFor="vorname">{r.labels.vorname}</Label>
                 <Input
-                  id="username"
+                  id="vorname"
                   type="text"
-                  placeholder={r.placeholders.username}
+                  placeholder={r.placeholders.vorname}
                   required
-                  value={username}
+                  value={firstname}
                   className={
-                    (invalidUsername &&
-                      showHint.UsernameFocused &&
+                    (invalidFirstname &&
+                      showHint.Firstnamefocused &&
                       "border-2 border-red-500") ||
                     ""
                   }
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => setFirstname(e.target.value)}
                   onBlur={() =>
-                    setShowHint((prev) => ({ ...prev, UsernameFocused: true }))
+                    setShowHint((prev) => ({ ...prev, Firstnamefocused: true }))
                   }
                   onFocus={() =>
-                    setShowHint((prev) => ({ ...prev, UsernameFocused: false }))
+                    setShowHint((prev) => ({
+                      ...prev,
+                      Firstnamefocused: false,
+                    }))
                   }
                 />
                 <AnimatePresence>
-                  {invalidUsername && showHint.UsernameFocused && (
+                  {invalidFirstname && showHint.Firstnamefocused && (
                     <motion.p
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -155,7 +183,43 @@ function Register() {
                       transition={{ duration: 0.3 }}
                       className="text-red-500 text-sm"
                     >
-                      {v.username.required}
+                      {v.vorname.required}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="nachname">{r.labels.nachanme}</Label>
+                <Input
+                  id="nachname"
+                  type="text"
+                  placeholder={r.placeholders.nachanme}
+                  required
+                  value={lastanme}
+                  className={
+                    (invalidLastname &&
+                      showHint.LastnameFocused &&
+                      "border-2 border-red-500") ||
+                    ""
+                  }
+                  onChange={(e) => setLastname(e.target.value)}
+                  onBlur={() =>
+                    setShowHint((prev) => ({ ...prev, LastnameFocused: true }))
+                  }
+                  onFocus={() =>
+                    setShowHint((prev) => ({ ...prev, LastnameFocused: false }))
+                  }
+                />
+                <AnimatePresence>
+                  {invalidLastname && showHint.LastnameFocused && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-red-500 text-sm"
+                    >
+                      {v.nachanme.required}
                     </motion.p>
                   )}
                 </AnimatePresence>

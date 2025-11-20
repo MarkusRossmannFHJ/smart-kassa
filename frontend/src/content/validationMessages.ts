@@ -5,7 +5,7 @@ export const validationMessages = {
     identifier: {
       invalid:
         "Bitte geben Sie einen gültigen Benutzernamen oder eine E-Mail-Adresse ein",
-         required: "Benutzername / Username darf nicht leer sein",
+      required: "Benutzername / Username darf nicht leer sein",
     },
     password: {
       tooShort: "Passwort braucht mindestens 8 Zeichen",
@@ -16,18 +16,22 @@ export const validationMessages = {
 
   // 🔸 Register-bezogene Fehler
   register: {
-    username: {
-      required: "Benutzername darf nicht leer sein",
-      tooShort: "Der Benutzername muss mindestens 3 Zeichen lang sein",
+    vorname: {
+      required: "Bitten geben Sie ihren Vornamen ein",
+    },
+    nachanme: {
+      required: "Bitten geben Sie ihren Nachnamen ein",
     },
     email: {
       invalid: "Bitte geben Sie eine gültige E-Mail-Adresse ein",
     },
     atu: {
-      invalid: "Bitte geben Sie eine gültige Umsatzsteuer-ID (ATU) ein (Format: ATU123456789)",
+      invalid:
+        "Bitte geben Sie eine gültige Umsatzsteuer-ID (ATU) ein (Format: ATU123456789)",
     },
     fn: {
-      invalid: "Bitte geben Sie eine gültige Firmenbuchnummer (FN) ein (Format:FN123456a)",
+      invalid:
+        "Bitte geben Sie eine gültige Firmenbuchnummer (FN) ein (Format:FN123456a)",
     },
     phone: {
       invalid: "Bitte geben Sie eine gültige Telefonnummer ein (7-20 Zeichen)",
@@ -35,9 +39,9 @@ export const validationMessages = {
     password: {
       tooShort: "Das Passwort muss mindestens 8 Zeichen enthalten",
       missingNumber: "Das Passwort muss mindestens eine Zahl enthalten",
-      missingSymbol:
-        "Das Passwort muss mindestens ein Sonderzeichen enthalten",
-      missingUpperCaseLetter: "Das Passwort muss mindestesn ein großen Buchstaben enthalten"  
+      missingSymbol: "Das Passwort muss mindestens ein Sonderzeichen enthalten",
+      missingUpperCaseLetter:
+        "Das Passwort muss mindestesn ein großen Buchstaben enthalten",
     },
   },
-} as const
+} as const;

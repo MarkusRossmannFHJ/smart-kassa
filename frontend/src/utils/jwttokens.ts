@@ -7,7 +7,7 @@ import { AuthStorage } from "./localStorageTokens";
  */
 export async function verifyAccessToken() {
   try {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = AuthStorage.getAccessToken();
 
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/verify`, {
       headers: {
