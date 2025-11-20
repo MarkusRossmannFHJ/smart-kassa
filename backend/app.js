@@ -79,7 +79,7 @@ app.use((req, res) => {
   });
 });
 
-// Server Configuration
+// LOCAL Server Configuration
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {

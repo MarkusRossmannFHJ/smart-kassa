@@ -27,8 +27,11 @@ const router = express.Router();
  * @body {string} phone_number - User's phone number (optional)
  * @body {string} password - User's password (required, will be hashed)
  * @body {string} business - User's business name (required)
+ * @body {string} fn - User's fn number (required)
+ * @body {string} atu - User's atu number (required)
  * @returns {Object} 201 - User created with access token and user info
- * @returns {Object} 400 - Missing fields or duplicate email
+ * @returns {Object} 400 - Missing required fields
+ * @returns {Object} 409 - User with this email already exists
  * @returns {Object} 500 - Internal server error
  */
 router.post("/", async (req, res) => {
