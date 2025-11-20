@@ -22,23 +22,28 @@ import { verifyAccessToken } from "../utils/jwt.js";
  * });
  */
 export function authenticateToken(req, res, next) {
-  // Extract Authorization header (format: "Bearer <token>")
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  try {
+    // Extract Authorization header (format: "Bearer <token>")
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
 
-  // Check if token exists
-  if (!token) {
-    return res.status(401).json({ error: "Acces token required" });
+    // Check if token exists
+    if (!token) {
+      return res.status(401).json({ error: "Acces token required" });
+    }
+
+    // Verify token signature and expiration
+    const decoded = verifyAccessToken(token);
+
+    if (!decoded) {
+      return res.status(403).json({ error: "Invalid or expired access token" });
+    }
+
+    // Attach user data to request object for use in route handlers
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.error("Auth middleware error: ", error);
+    return res.status(500).json({ error: "Authentication failed" });
   }
-
-  // Verify token signature and expiration
-  const decoded = verifyAccessToken(token);
-
-  if (!decoded) {
-    return res.status(403).json({ error: "Invalid or expired access token" });
-  }
-
-  // Attach user data to request object for use in route handlers
-  req.user = decoded;
-  next();
 }
