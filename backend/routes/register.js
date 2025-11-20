@@ -35,12 +35,28 @@ const router = express.Router();
  * @returns {Object} 500 - Internal server error
  */
 router.post("/", async (req, res) => {
-  const { first_name, last_name, email, phone_number, password, business, fn, atu } =
-    req.body;
+  const {
+    first_name,
+    last_name,
+    email,
+    phone_number,
+    password,
+    business,
+    fn,
+    atu,
+  } = req.body;
 
   try {
     // validate input (if missing fields or something is wrong)
-    if (!first_name || !last_name || !email || !password || !business || !fn || !atu) {
+    if (
+      !first_name ||
+      !last_name ||
+      !email ||
+      !password ||
+      !business ||
+      !fn ||
+      !atu
+    ) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -60,7 +76,7 @@ router.post("/", async (req, res) => {
     // Insert user into users table and return the generated user_id
     const userRes = await pool.query(
       `INSERT INTO users (first_name, last_name, email, phone_number, business)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING user_id`,
       [first_name, last_name, email, phone_number, business]
     );
@@ -83,7 +99,7 @@ router.post("/", async (req, res) => {
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
     await pool.query(
       `INSERT INTO account (user_id, name, password_hash, created_on, refresh_token, token_expiress_at, fn, atu)
-       VALUES ($1, $2, $3, NOW(), $4, $5)`,
+       VALUES ($1, $2, $3, NOW(), $4, $5, $6, $7)`,
       [
         userId,
         `${first_name} ${last_name}`,
