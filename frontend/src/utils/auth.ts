@@ -10,6 +10,8 @@ export async function register(
   phoneNumber: string,
   password: string,
   business: string,
+  fn: string,
+  atu: string,
   dispatch: AppDispatch
 ) {
   try {
@@ -22,6 +24,8 @@ export async function register(
         phone_number: phoneNumber,
         password: password,
         business: business,
+        fn: fn,
+        atu: atu,
       }
     );
 
@@ -45,7 +49,6 @@ export async function register(
 
     return await response.data;
   } catch (error) {
-    
     if (error instanceof AxiosError) {
       if (error.response?.status === 500) {
         throw new Error("Internal Server Error");
