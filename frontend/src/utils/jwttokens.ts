@@ -13,37 +13,29 @@ export async function verifyAccessToken() {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
+      withCredentials: true,
     });
 
-    return await response.data;
+    return response.data;
   } catch (error) {
     if (error instanceof AxiosError && error.response) {
-      const status = error.response.status;
+      AuthStorage.clearToken();
+      try {
+        const newAccessToken = await refreshAccessToken();
 
-      if (status === 401) {
+        const response = axios.get(`${import.meta.env.VITE_API_URL}/verify`, {
+          headers: {
+            Authorization: `Bearer ${newAccessToken}`,
+          },
+        });
+
+        return (await response).data;
+      } catch {
         AuthStorage.clearToken();
-        try {
-          const newAccessToken = await refreshAccessToken();
-
-          const response = axios.get(`${import.meta.env.VITE_API_URL}/verify`, {
-            headers: {
-              Authorization: `Bearer ${newAccessToken}`,
-            },
-          });
-
-          return (await response).data;
-        } catch {
-          AuthStorage.clearToken();
-          throw new Error("Session expired, please login again");
-        }
+        throw new Error("Session expired, please login again");
       }
-      if (status === 403) {
-        AuthStorage.clearToken();
-        throw new Error("Access denied");
-      }
-      if (status === 500) {
-        throw new Error("Verification failed");
-      }
+    } else {
+      throw new Error("Unknown Error");
     }
   }
 }

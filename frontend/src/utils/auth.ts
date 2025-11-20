@@ -26,16 +26,14 @@ export async function register(
         business: business,
         fn: fn,
         atu: atu,
-      }
+      },
+      { withCredentials: true } // to set the refresh token in the Cookie
     );
 
     if (!response) {
       throw new Error("Response is Empty");
     }
-    console.log(response.data);
-    console.log(response);
-    console.log(response.data.message);
-    console.log(response.data.user);
+
     AuthStorage.setTokens(response.data.accessToken);
     dispatch(
       signInUser({
