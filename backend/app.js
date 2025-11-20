@@ -36,7 +36,11 @@ const app = express();
 // CORS - Allow frontend to make requests with credentials
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173", // Frontend URL
+    origin: [
+      "http://localhost:5173",
+      "https://localhost:5173",
+      "https://smart-kassa.vercel.app",
+    ],
     credentials: true, // Allow cookies to be sent
   })
 );
