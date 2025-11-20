@@ -39,7 +39,7 @@ In the future, the system will be expanded and adapted for other business sector
 
 Mario Shenouda <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="20"/> [GitHub-Profil](https://github.com/Juma2016) <br>
 
-Markus Rossmann <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="20"/> [GitHub-Profil](https://github.com/MarkusRossmannFHJ)
+Markus Rossmann <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="20"/> [GitHub-Profil](https://github.com/Th3Stubi)
 
 ## Further Information
 This project is part of an internal internship program at [FH Joanneum](https://www.fh-joanneum.at/en/).
