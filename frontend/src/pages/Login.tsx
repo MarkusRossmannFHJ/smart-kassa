@@ -35,7 +35,7 @@ import type { RootState, AppDispatch } from "../../redux/store";
  * To handle if user clicked in input field and focuses it
  */
 interface showError {
-  IdentifierFocused: boolean;
+  EmailFocused: boolean;
   PasswordFocused: boolean;
 }
 
@@ -44,12 +44,12 @@ interface showError {
  * @returns Register Page where Users can Sign Up
  */
 function Login() {
-  const [identifier, setItentifier] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   // to show the user how to input valid data and in which input field
   const [showHint, setShowHint] = useState<showError>({
-    IdentifierFocused: false,
+    EmailFocused: false,
     PasswordFocused: false,
   });
 
@@ -61,19 +61,13 @@ function Login() {
   const toastState = useSelector((state: RootState) => state.toastState);
   const dispatch: AppDispatch = useDispatch();
 
-  const invalidIdentifier = identifier === "";
+  const invalidEmail = useInvalidEmail(email);
   const invalidPassword: PASSWORD_VALIDATOR = useInvalidPassword(password);
 
   function handleLogin() {
-    // To decide wether name or email should be checked
-    if (identifier && identifier.includes("@")) {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const invalidEmail = useInvalidEmail(identifier);
-
-      //Since we haven't any backend data, this is the only check that can be made for now
-      if (invalidEmail) {
-        return false;
-      }
+    //Since we haven't any backend data, this is the only check that can be made for now
+    if (invalidEmail) {
+      return false;
     }
 
     if (invalidPassword.passwordIsInvalid) {
@@ -102,9 +96,9 @@ function Login() {
 
   useWarningToast(toastState.showWarning, t.warning.title, dispatch);
 
-  //Form Validator, so the username is not empty, the email is not unvalid and the password is min. 6 chars long, one Special char and one Digit
+  //Form Validator, so the email is valid and the password is min. 6 chars long
   const formUnvalid =
-    invalidIdentifier || !invalidPassword.passwordminimum6Chars;
+    invalidEmail || !invalidPassword.passwordminimum6Chars;
 
   return (
     <main
@@ -127,35 +121,35 @@ function Login() {
           <form>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="identifier">{l.labels.identifier}</Label>
+                <Label htmlFor="email">{l.labels.email}</Label>
                 <Input
-                  id="identifier"
-                  type="text"
-                  placeholder={l.placeholders.identifier}
+                  id="email"
+                  type="email"
+                  placeholder={l.placeholders.email}
                   required
-                  value={identifier}
+                  value={email}
                   className={
-                    (invalidIdentifier &&
-                      showHint.IdentifierFocused &&
+                    (invalidEmail &&
+                      showHint.EmailFocused &&
                       "border-2 border-red-500") ||
                     ""
                   }
-                  onChange={(e) => setItentifier(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   onBlur={() =>
                     setShowHint((prev) => ({
                       ...prev,
-                      IdentifierFocused: true,
+                      EmailFocused: true,
                     }))
                   }
                   onFocus={() =>
                     setShowHint((prev) => ({
                       ...prev,
-                      IdentifierFocused: false,
+                      EmailFocused: false,
                     }))
                   }
                 />
                 <AnimatePresence>
-                  {invalidIdentifier && showHint.IdentifierFocused && (
+                  {invalidEmail && showHint.EmailFocused && (
                     <motion.p
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -163,7 +157,7 @@ function Login() {
                       transition={{ duration: 0.3 }}
                       className="text-red-500 text-sm"
                     >
-                      {v.identifier.invalid}
+                      {v.email.invalid}
                     </motion.p>
                   )}
                 </AnimatePresence>

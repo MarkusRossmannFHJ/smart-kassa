@@ -34,6 +34,23 @@ export const useInvalidPassword = (password: string) => {
   return passwordInvalidData;
 };
 
+export const useInvalidConfirmPassword = (password: string, confirmPassword: string) => {
+
+  const missing = confirmPassword === "";
+  const matching = confirmPassword === password ? true : false;
+
+  const invalid = missing || !matching;
+
+  const isInvalid = {
+    invalid: invalid,
+    missing:  missing,
+    matching: matching
+  } 
+  
+  return isInvalid;
+  
+};
+
 export const useInvalidATU = (atu: string) => {
   const cleaned = atu.trim().replace(/[\s/]/g, "");
 
