@@ -2,8 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import { ModeToggle } from "./components/ModdleToggle";
 import Login from "./pages/Login";
+import RootLayout from "./layout/RootLayout";
 
 /**
  * The Routes are all declared here
@@ -13,20 +13,21 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* This will ensure, that each Route has the same Header */}
         <Route
-          path="/"
           element={
             <ProtectedRoute>
-              <Home />
+              <RootLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="/" element={<Home />} />
+        </Route>
+
+
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </Routes>
-      <footer className="fixed bottom-3 right-2">
-        <ModeToggle />
-      </footer>
     </Router>
   );
 }

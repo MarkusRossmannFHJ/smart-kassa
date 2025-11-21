@@ -39,9 +39,8 @@ export const validationMessages = {
     password: {
       tooShort: "Das Passwort muss mindestens 8 Zeichen enthalten",
       missingNumber: "Das Passwort muss mindestens eine Zahl enthalten",
-      missingSymbol: "Das Passwort muss mindestens ein Sonderzeichen enthalten",
-      missingUpperCaseLetter:
-        "Das Passwort muss mindestesn ein großen Buchstaben enthalten",
+      missingSymbol:
+        "Das Passwort muss mindestens ein Sonderzeichen enthalten"
     },
   },
 } as const;
