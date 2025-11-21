@@ -3,6 +3,7 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ModeToggle } from "./components/ModdleToggle";
+import Login from "./pages/Login";
 
 /**
  * The Routes are all declared here
@@ -21,6 +22,7 @@ function App() {
           }
         />
         <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
       <footer className="fixed bottom-3 right-2">
         <ModeToggle />
