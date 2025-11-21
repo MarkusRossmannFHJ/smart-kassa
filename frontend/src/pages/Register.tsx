@@ -27,9 +27,9 @@ import {
   useInvalidUsername,
   type PASSWORD_VALIDATOR,
 } from "../hooks/useValidator";
-import { authContent } from "../content/auth";
-import { validationMessages } from "../content/validationMessages";
-import { toastMessages } from "../content/toastMessages";
+import { authContent } from "../content/auth/auth";
+import { validationMessages } from "../content/auth/validationMessages";
+import { toastMessages } from "../content/auth/toastMessages";
 import type { AppDispatch, RootState } from "../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { useWarningToast } from "../hooks/useToast";
@@ -406,6 +406,7 @@ function Register() {
                   <InputGroupAddon align="inline-end">
                     <div
                       onClick={() => setShowPassword((prev) => !prev)}
+                      data-testid="password-toggle"
                       className="cursor-pointer"
                     >
                       {showPassword ? (

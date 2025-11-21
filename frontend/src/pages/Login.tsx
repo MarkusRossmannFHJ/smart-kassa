@@ -24,9 +24,9 @@ import {
   useInvalidPassword,
   type PASSWORD_VALIDATOR,
 } from "../hooks/useValidator";
-import { authContent } from "../content/auth";
-import { validationMessages } from "../content/validationMessages";
-import { toastMessages } from "../content/toastMessages";
+import { authContent } from "../content/auth/auth";
+import { validationMessages } from "../content/auth/validationMessages";
+import { toastMessages } from "../content/auth/toastMessages";
 import { useWarningToast } from "../hooks/useToast";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../../redux/store";
@@ -163,7 +163,7 @@ function Login() {
                       transition={{ duration: 0.3 }}
                       className="text-red-500 text-sm"
                     >
-                      {v.identifier.required}
+                      {v.identifier.invalid}
                     </motion.p>
                   )}
                 </AnimatePresence>
@@ -205,6 +205,7 @@ function Login() {
                   <InputGroupAddon align="inline-end">
                     <div
                       onClick={() => setShowPassword((prev) => !prev)}
+                      data-testid="password-toggle"
                       className="cursor-pointer"
                     >
                       {showPassword ? (
