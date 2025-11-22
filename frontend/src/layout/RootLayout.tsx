@@ -3,6 +3,8 @@ import { MobileMenu } from "../components/MobileMenu";
 import { navContent } from "../content/header/navContent";
 import { CircleUser } from "lucide-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../redux/store";
 
 /**
  * @returns the Root layout
@@ -10,6 +12,8 @@ import { useState } from "react";
 export default function RootLayout() {
   // to know which path is active for the underline in the footer
   const [path, setPath] = useState("home");
+
+  const user = useSelector((state: RootState) => state.user);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -37,7 +41,7 @@ export default function RootLayout() {
           ))}
         </nav>
 
-        <h1 className="font-bold text-xl md:hidden">Guten Tag User!</h1>
+        <h1 className="font-bold text-xl md:hidden">Guten Tag {user.firstName}!</h1>
 
         {/* Account icon on the right side */}
         <div className="flex items-center gap-3">
@@ -56,7 +60,7 @@ export default function RootLayout() {
     backdrop-blur-md bg-white/60 dark:bg-black/40
     border-t border-zinc-300 dark:border-zinc-800
     px-4
-    fixed bottom-0 left-0
+    fixed bottom-0 left-0 md:hidden
   "
       >
         <nav className="grid grid-cols-3 h-full place-items-center text-sm font-medium">

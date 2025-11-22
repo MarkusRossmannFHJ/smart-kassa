@@ -5,7 +5,7 @@ import { signInUser } from "../../redux/slices/userSlice";
 import type { USER_DTO } from "../../constants/User";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
-import { finishLoading, setAuthenticated, setUnauthenticated, startLoading } from "../../redux/slices/authSlice";
+import { setAuthenticated, setUnauthenticated } from "../../redux/slices/authSlice";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -29,8 +29,6 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   useEffect(() => {
     async function getJWTTokens() {
 
-      dispatch(startLoading());
-
       try {
         const userData: USER_DTO = await verifyAccessToken();
         if (!userData) {
@@ -49,7 +47,6 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
       } catch {
         navigator("/register");
         dispatch(setUnauthenticated());
-        dispatch(finishLoading());
       }
     }
     getJWTTokens();

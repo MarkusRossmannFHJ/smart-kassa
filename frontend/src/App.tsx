@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+//import { ProtectedRoute } from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import RootLayout from "./layout/RootLayout";
 
@@ -16,9 +16,9 @@ function App() {
         {/* This will ensure, that each Route has the same Header */}
         <Route
           element={
-            <ProtectedRoute>
+            //<ProtectedRoute>
               <RootLayout />
-            </ProtectedRoute>
+            //</ProtectedRoute>
           }
         >
           <Route path="/" element={<Home />} />

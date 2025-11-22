@@ -14,9 +14,6 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    startLoading(state) {
-      state.isLoading = true;
-    },
 
     finishLoading(state) {
       state.isLoading = false;
@@ -29,13 +26,12 @@ const authSlice = createSlice({
 
     setUnauthenticated(state) {
       state.isAuthenticated = false;
-      state.isLoading = true
+      state.isLoading = false;
     }
   }
 })
 
 export const {
-  startLoading,
   finishLoading,
   setAuthenticated,
   setUnauthenticated,
