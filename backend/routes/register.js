@@ -73,54 +73,74 @@ router.post("/", async (req, res) => {
     // Hash password using Argon2 (secure password hashing)
     const hashedPassword = await argon2.hash(password);
 
-    // Insert user into users table and return the generated user_id
-    const userRes = await pool.query(
-      `INSERT INTO users (first_name, last_name, email, phone_number, business)
+    // tokens and values for payload, response etc. values initialized in try catch that are needed else where
+    let accessToken;
+    let refreshToken;
+    let userId;
+
+    try {
+      // Begin a transaction, so if it fails, or one insert operation fails, both querys roll back
+      await pool.query("BEGIN");
+      // Insert user into users table and return the generated user_id
+      const userRes = await pool.query(
+        `INSERT INTO users (first_name, last_name, email, phone_number, business)
       VALUES ($1, $2, $3, $4, $5)
       RETURNING user_id`,
-      [first_name, last_name, email, phone_number, business]
-    );
+        [first_name, last_name, email, phone_number, business]
+      );
 
-    const userId = userRes.rows[0].user_id;
+      userId = await userRes.rows[0].user_id;
 
-    // Prepare payload for access token (includes user info for API requests)
-    const payload = {
-      userId: userId,
-      email: email,
-      name: `${first_name} ${last_name}`,
-      business: business,
-    };
+      // Prepare payload for access token (includes user info for API requests)
+      const payload = {
+        userId: userId,
+        email: email,
+        name: `${first_name} ${last_name}`,
+        business: business,
+      };
 
-    // Generate both access and refresh tokens
-    const accessToken = generateAccessToken(payload);
-    const refreshToken = generateRefreshToken({ userId: userId });
+      // Generate both access and refresh tokens
+      accessToken = generateAccessToken(payload);
+      refreshToken = generateRefreshToken({ userId: userId });
 
-    // Insert account record with hashed password and refresh token
-    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
-    await pool.query(
-      `INSERT INTO account (user_id, name, password_hash, created_on, refresh_token, token_expiress_at, fn, atu)
+      // Insert account record with hashed password and refresh token
+      const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
+
+      await pool.query(
+        `INSERT INTO account (user_id, name, password_hash, created_on, refresh_token, token_expiress_at, fn, atu)
        VALUES ($1, $2, $3, NOW(), $4, $5, $6, $7)`,
-      [
-        userId,
-        `${first_name} ${last_name}`,
-        hashedPassword,
-        refreshToken,
-        expiresAt,
-        fn,
-        atu,
-      ]
-    );
+        [
+          userId,
+          `${first_name} ${last_name}`,
+          hashedPassword,
+          refreshToken,
+          expiresAt,
+          fn,
+          atu,
+        ]
+      );
+
+      await pool.query("COMMIT");
+    } catch (error) {
+      await pool.query("ROLLBACK");
+      if (/Key \(fn\)=\(([^)]+)\)/.test(error.detail)) {
+        return res
+          .status(409)
+          .send({ error: `Ein Account mit der FN '${fn}' existiert bereits.` });
+      }
+    }
 
     // Store refresh token in httpOnly cookie (not accessible via JavaScript)
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true, // Prevents XSS attacks
       secure: process.env.NODE_ENV === "production", // HTTPS only in production
-      sameSite: "lax", // CSRF protection
+      sameSite: "none", // CSRF protection
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      path: "/",
     });
 
     // Return access token and user info to client
-    res.status(201).json({
+    return res.status(201).json({
       message: "User registered successfully",
       accessToken,
       user: {
