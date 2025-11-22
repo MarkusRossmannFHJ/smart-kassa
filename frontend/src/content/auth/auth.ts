@@ -9,7 +9,7 @@ const shared = {
   buttons: {
     google: "Mit Google anmelden",
   },
-} as const
+} as const;
 
 // Auth-Content
 export const authContent = {
@@ -20,20 +20,24 @@ export const authContent = {
       subtitle: "Bitte geben Sie Ihre Daten ein, um ein Konto zu erstellen",
     },
     labels: {
-      username: "Benutzername",
+      vorname: "Vorname",
+      nachanme: "Nachname",
       email: "E-Mail-Adresse",
       atu: "Umsatzsteuer-ID (ATU)",
       fn: "Firmenbuchnummer (FN)",
       phone: "Telefonnummer",
       password: shared.labels.password,
+      confirmPassword: shared.labels.password + " bestätigen"
     },
     placeholders: {
-      username: "John18",
+      vorname: "Max",
+      nachanme: "Mustermann",
       email: "beispiel@domain.at",
-      atu: "ATU12345678",
-      fn: "FN12345a",
+      atu: "ATU123456789",
+      fn: "FN123456a",
       phone: "+43 660 1234567",
       password: shared.placeholders.password,
+      confirmPassword: shared.placeholders.password,
     },
     buttons: {
       register: "Jetzt registrieren",
@@ -50,14 +54,14 @@ export const authContent = {
       subtitle: "Melden Sie sich mit Ihren Zugangsdaten an",
     },
     labels: {
-      identifier: "Benutzername oder E-Mail",
+      email: "E-Mail-Adresse",
       password: shared.labels.password,
     },
     placeholders: {
-      identifier: "John18 or beispiel@domain.at",
+      email: "beispiel@domain.at",
       password: shared.placeholders.password,
     },
-     links: {
+    links: {
       forgotPassword: "Passwort vergessen?",
     },
     buttons: {
@@ -69,4 +73,4 @@ export const authContent = {
       link: "Konto erstellen",
     },
   },
-} as const
+} as const;

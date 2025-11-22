@@ -1,4 +1,11 @@
-import { Navigate } from "react-router-dom";
+import { verifyAccessToken } from "../utils/jwttokens";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../../redux/store";
+import { signInUser } from "../../redux/slices/userSlice";
+import type { USER_DTO } from "../../constants/User";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { finishLoading, setAuthenticated, setUnauthenticated, startLoading } from "../../redux/slices/authSlice";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -11,20 +18,50 @@ interface ProtectedRouteProps {
  */
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
-  //To be able to test the homepage
-  const DISABLED = true; // <-- nur hier ändern
-
-  if (DISABLED) {
-    return <>{children}</>;
-  }
-
   // Überprüfen, ob der User eingeloggt ist
   // Kann man später mit einem Auth-Context oder localStorage machen
-  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  const dispatch: AppDispatch = useDispatch();
+  const navigator = useNavigate();
 
-  if (!isAuthenticated) {
-    // Redirect zum Login, wenn nicht authentifiziert
-    return <Navigate to="/register" replace />;
+  // Check if the user is getting loaded currently
+  const {isLoading} = useSelector((state: RootState) => state.authState);
+
+  useEffect(() => {
+    async function getJWTTokens() {
+
+      dispatch(startLoading());
+
+      try {
+        const userData: USER_DTO = await verifyAccessToken();
+        if (!userData) {
+          throw new Error("User Data invalid");
+        }
+        dispatch(
+          signInUser({
+            id: userData.id,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            email: userData.email,
+            phoneNumber: userData.phoneNumber,
+          })
+        );
+       dispatch(setAuthenticated())
+      } catch {
+        navigator("/register");
+        dispatch(setUnauthenticated());
+        dispatch(finishLoading());
+      }
+    }
+    getJWTTokens();
+  }, [dispatch, navigator]);
+
+
+  if (isLoading) {
+     return (
+      <div className="w-full h-screen flex items-center justify-center">
+        <p className="text-lg font-semibold">Loading...</p>
+      </div>
+    );
   }
 
   return <>{children}</>;

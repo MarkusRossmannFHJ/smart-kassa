@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    // ignoreDeprecations komplett entfernen
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2022",
     "useDefineForClassFields": true,
@@ -24,9 +25,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    "baseUrl": ".",
+    // baseUrl entfernen und paths anpassen
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]  // "./" hinzufügen!
     }
   },
   "include": ["src"]

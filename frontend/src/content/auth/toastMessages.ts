@@ -2,7 +2,7 @@
 const shared = {
   errorPrefix: "Fehler:",
   successPrefix: "Erfolg:",
-} as const
+} as const;
 
 // 🔹 Auth-Toasts
 export const toastMessages = {
@@ -26,5 +26,9 @@ export const toastMessages = {
     error: {
       title: `${shared.errorPrefix} Registrierung fehlgeschlagen! Bitte überprüfen Sie Ihre Eingaben und versuchen Sie es erneut.`,
     },
+    warning: {
+      title:
+        "Hinweis: Sie müssen sich anmelden oder registrieren, bevor Sie unseren Service nutzen können.",
+    },
   },
-} as const
+} as const;
