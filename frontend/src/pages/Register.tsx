@@ -129,7 +129,22 @@ function Register() {
       navigator("/");
     } catch (error) {
       console.error(error);
-      toast.error(t.error.title);
+      if (error instanceof Error) {
+        if (error.message === "Email already exists") {
+          toast.error(t.error.emailAlreadyInUse);
+        }
+        if (error.message === "FN already exists") {
+          toast.error(t.error.fnAlreadyInUse);
+        }
+        if (error.message === "Phonenumber already exists") {
+          toast.error(t.error.phoneNumberAlreadyInUse);
+        }
+        if (error.message === "ATU already exists") {
+          toast.error(t.error.atuAlreadyInUse);
+        }
+      } else {
+        toast.error(t.error.title);
+      }
     }
   };
 

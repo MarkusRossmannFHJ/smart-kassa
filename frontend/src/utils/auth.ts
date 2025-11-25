@@ -53,7 +53,29 @@ export async function register(
         throw new Error("Internal Server Error");
       }
       if (error.response?.status === 409) {
-        throw new Error("Email already exists");
+        if (
+          error.response?.data.error === "User with this email already exists"
+        ) {
+          throw new Error("Email already exists");
+        }
+        if (
+          error.response?.data.error ===
+          `Ein Account mit der FN '${fn}' existiert bereits.`
+        ) {
+          throw new Error("FN already exists");
+        }
+        if (
+          error.response?.data.error ===
+          `Ein Account mit der Telefonnumer '${phoneNumber}' existiert bereits.`
+        ) {
+          throw new Error("Phonenumber already exists");
+        }
+        if (
+          error.response?.data.error ===
+          `Ein Account mit der ATU-Nummer '${atu}' existiert bereits.`
+        ) {
+          throw new Error("ATU already exists");
+        }
       }
       if (error.response?.status === 400) {
         throw new Error("Missing Fields");
