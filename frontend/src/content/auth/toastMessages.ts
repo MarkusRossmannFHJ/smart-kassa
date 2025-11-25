@@ -12,7 +12,7 @@ export const toastMessages = {
       title: `${shared.successPrefix} Login erfolgreich! Sie werden weitergeleitet...`,
     },
     error: {
-      title: `${shared.errorPrefix} Login fehlgeschlagen! Bitte überprüfen Sie Ihre Username/E-Mail-Adresse und Ihr Kennwort.`,
+      title: `${shared.errorPrefix} Login fehlgeschlagen! Bitte überprüfen Sie Ihre E-Mail-Adresse und Ihr Kennwort.`,
     },
     warning: {
       title:

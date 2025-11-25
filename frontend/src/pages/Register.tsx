@@ -114,7 +114,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const response = await register(
+      await register(
         firstname,
         lastanme,
         email,
@@ -125,11 +125,10 @@ function Register() {
         atu,
         dispatch // to set Global User Variable (Injected)
       );
-
-      console.log(response.userId);
       toast.success(t.success.title);
       navigator("/");
-    } catch {
+    } catch (error) {
+      console.error(error);
       toast.error(t.error.title);
     }
   };

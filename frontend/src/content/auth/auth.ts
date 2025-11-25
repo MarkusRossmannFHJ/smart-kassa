@@ -52,11 +52,11 @@ export const authContent = {
       subtitle: "Melden Sie sich mit Ihren Zugangsdaten an",
     },
     labels: {
-      identifier: "E-Mail",
+      email: "E-Mail",
       password: shared.labels.password,
     },
     placeholders: {
-      identifier: "beispiel@domain.at",
+      email: "beispiel@domain.at",
       password: shared.placeholders.password,
     },
     links: {

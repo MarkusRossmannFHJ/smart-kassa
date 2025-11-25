@@ -47,6 +47,7 @@ export async function register(
 
     return await response.data;
   } catch (error) {
+    console.error(error);
     if (error instanceof AxiosError) {
       if (error.response?.status === 500) {
         throw new Error("Internal Server Error");
@@ -59,6 +60,41 @@ export async function register(
       }
     } else {
       throw new Error("Unknown Error");
+    }
+  }
+}
+
+export async function login(email: string, password: string) {
+  if (!email || !password) {
+    throw new Error("Missing Fields");
+  }
+
+  try {
+    const { status, data } = await axios.post(
+      `${import.meta.env.VITE_API_URL}/login`,
+      {
+        email: email,
+        password: password,
+      },
+      { withCredentials: true } // to set the refresh token in the Cookie
+    );
+
+    if (!status || !data) {
+      throw new Error("Response is empty");
+    }
+    AuthStorage.setTokens(data.accessToken);
+    return await data;
+  } catch (error) {
+    console.error(error);
+    if (error instanceof AxiosError) {
+      if (error.response?.status === 401 || error.response?.status === 400) {
+        throw new Error("Wrong Email or Password");
+      }
+      if (error.response?.status === 500) {
+        throw new Error("Internal Server Error");
+      }
+    } else {
+      throw new Error("Internal Server Error");
     }
   }
 }

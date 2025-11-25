@@ -2,7 +2,7 @@
 export const validationMessages = {
   // 🔸 Login-bezogene Fehler
   login: {
-    identifier: {
+    email: {
       invalid:
         "Bitte geben Sie einen gültigen Benutzernamen oder eine E-Mail-Adresse ein",
       required: "Benutzername / Username darf nicht leer sein",

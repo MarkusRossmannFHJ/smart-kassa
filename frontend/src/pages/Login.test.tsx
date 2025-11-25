@@ -16,7 +16,7 @@ describe("Login", () => {
     );
 
   const getFields = (placeholder: typeof authContent.login.placeholders) => ({
-    identifier: screen.getByPlaceholderText(placeholder.identifier),
+    email: screen.getByPlaceholderText(placeholder.email),
     password: screen.getByPlaceholderText(placeholder.password),
   });
 
@@ -26,21 +26,25 @@ describe("Login", () => {
     const placeholder = authContent.login.placeholders;
     const validations = validationMessages.login;
 
-    const { identifier, password } = getFields(placeholder);
+    const { email, password } = getFields(placeholder);
 
     // Trigger validation by blur
-    await userEvent.click(identifier);
+    await userEvent.click(email);
     await userEvent.tab();
 
     await userEvent.click(password);
     await userEvent.tab();
 
     // Errors should appear
-    expect(await screen.findByText(validations.identifier.invalid)).toBeInTheDocument();
-    expect(await screen.findByText(validations.password.tooShort)).toBeInTheDocument();
+    expect(
+      await screen.findByText(validations.email.invalid)
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByText(validations.password.tooShort)
+    ).toBeInTheDocument();
 
     // Enter valid values
-    await userEvent.type(identifier, "john18");
+    await userEvent.type(email, "john18");
     await userEvent.tab();
 
     await userEvent.type(password, "Passwort123!");
@@ -48,11 +52,15 @@ describe("Login", () => {
 
     // Errors should disappear (use waitFor because of framer-motion exit)
     await waitFor(() =>
-      expect(screen.queryByText(validations.identifier.invalid)).not.toBeInTheDocument()
+      expect(
+        screen.queryByText(validations.email.invalid)
+      ).not.toBeInTheDocument()
     );
 
     await waitFor(() =>
-      expect(screen.queryByText(validations.password.tooShort)).not.toBeInTheDocument()
+      expect(
+        screen.queryByText(validations.password.tooShort)
+      ).not.toBeInTheDocument()
     );
   });
 
@@ -67,10 +75,10 @@ describe("Login", () => {
     setup();
 
     const placeholder = authContent.login.placeholders;
-    const { identifier, password } = getFields(placeholder);
+    const { email, password } = getFields(placeholder);
 
-    // Use your placeholder exactly as you want (identifier)
-    await userEvent.type(identifier, placeholder.identifier);
+    // Use your placeholder exactly as you want (email)
+    await userEvent.type(email, placeholder.email);
     await userEvent.type(password, "Passwort123!");
 
     const loginText = authContent.login.buttons.login;

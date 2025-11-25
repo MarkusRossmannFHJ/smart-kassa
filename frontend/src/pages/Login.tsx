@@ -1,6 +1,6 @@
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Card,
   CardHeader,
@@ -30,12 +30,13 @@ import { toastMessages } from "../content/auth/toastMessages";
 import { useWarningToast } from "../hooks/useToast";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../../redux/store";
+import { login } from "@/utils/auth";
 
 /**
  * To handle if user clicked in input field and focuses it
  */
 interface showError {
-  IdentifierFocused: boolean;
+  EmailFocused: boolean;
   PasswordFocused: boolean;
 }
 
@@ -44,12 +45,12 @@ interface showError {
  * @returns Register Page where Users can Sign Up
  */
 function Login() {
-  const [identifier, setItentifier] = useState("");
+  const [email, setItentifier] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   // to show the user how to input valid data and in which input field
   const [showHint, setShowHint] = useState<showError>({
-    IdentifierFocused: false,
+    EmailFocused: false,
     PasswordFocused: false,
   });
 
@@ -57,36 +58,28 @@ function Login() {
   const v = validationMessages.login;
   const t = toastMessages.login;
 
+  const navigator = useNavigate();
+
   // Redux States and Dispatches
   const toastState = useSelector((state: RootState) => state.toastState);
   const dispatch: AppDispatch = useDispatch();
 
-  const invalidIdentifier = identifier === "";
+  const invalidemail = useInvalidEmail(email);
   const invalidPassword: PASSWORD_VALIDATOR = useInvalidPassword(password);
 
-  function handleLogin() {
-    // To decide wether name or email should be checked
-    if (identifier && identifier.includes("@")) {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const invalidEmail = useInvalidEmail(identifier);
-
-      //Since we haven't any backend data, this is the only check that can be made for now
-      if (invalidEmail) {
-        return false;
-      }
-    }
-
-    if (invalidPassword.passwordIsInvalid) {
+  async function handleLogin() {
+    try {
+      await login(email, password);
+      handleToast(true);
+      navigator("/");
+    } catch (error) {
+      console.error(error);
+      handleToast(false);
       return false;
     }
-
-    return true;
   }
 
-  function handleToast() {
-    const isLoginSuccessful = handleLogin();
-    console.log(isLoginSuccessful);
-
+  async function handleToast(isLoginSuccessful: boolean) {
     if (isLoginSuccessful) {
       toast(t.success.title, {
         position: "top-center",
@@ -103,8 +96,7 @@ function Login() {
   useWarningToast(toastState.showWarning, t.warning.title, dispatch);
 
   //Form Validator, so the username is not empty, the email is not unvalid and the password is min. 6 chars long, one Special char and one Digit
-  const formUnvalid =
-    invalidIdentifier || !invalidPassword.passwordminimum6Chars;
+  const formUnvalid = invalidemail || !invalidPassword.passwordminimum6Chars;
 
   return (
     <main
@@ -127,16 +119,16 @@ function Login() {
           <form>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="identifier">{l.labels.identifier}</Label>
+                <Label htmlFor="email">{l.labels.email}</Label>
                 <Input
-                  id="identifier"
+                  id="email"
                   type="text"
-                  placeholder={l.placeholders.identifier}
+                  placeholder={l.placeholders.email}
                   required
-                  value={identifier}
+                  value={email}
                   className={
-                    (invalidIdentifier &&
-                      showHint.IdentifierFocused &&
+                    (invalidemail &&
+                      showHint.EmailFocused &&
                       "border-2 border-red-500") ||
                     ""
                   }
@@ -144,18 +136,18 @@ function Login() {
                   onBlur={() =>
                     setShowHint((prev) => ({
                       ...prev,
-                      IdentifierFocused: true,
+                      EmailFocused: true,
                     }))
                   }
                   onFocus={() =>
                     setShowHint((prev) => ({
                       ...prev,
-                      IdentifierFocused: false,
+                      EmailFocused: false,
                     }))
                   }
                 />
                 <AnimatePresence>
-                  {invalidIdentifier && showHint.IdentifierFocused && (
+                  {invalidemail && showHint.EmailFocused && (
                     <motion.p
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -163,7 +155,7 @@ function Login() {
                       transition={{ duration: 0.3 }}
                       className="text-red-500 text-sm"
                     >
-                      {v.identifier.invalid}
+                      {v.email.invalid}
                     </motion.p>
                   )}
                 </AnimatePresence>
@@ -239,7 +231,7 @@ function Login() {
             type="submit"
             className="w-full"
             onClick={() => {
-              handleToast();
+              handleLogin();
             }}
             disabled={formUnvalid}
           >
