@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 //import { ProtectedRoute } from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import RootLayout from "./layout/RootLayout";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 /**
  * The Routes are all declared here
@@ -16,14 +17,13 @@ function App() {
         {/* This will ensure, that each Route has the same Header */}
         <Route
           element={
-            //<ProtectedRoute>
+            <ProtectedRoute>
               <RootLayout />
-            //</ProtectedRoute>
+            </ProtectedRoute>
           }
         >
           <Route path="/" element={<Home />} />
         </Route>
-
 
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />

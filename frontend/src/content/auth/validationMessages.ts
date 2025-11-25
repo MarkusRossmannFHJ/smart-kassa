@@ -38,12 +38,11 @@ export const validationMessages = {
     password: {
       tooShort: "Das Passwort muss mindestens 8 Zeichen enthalten",
       missingNumber: "Das Passwort muss mindestens eine Zahl enthalten",
-      missingSymbol:
-        "Das Passwort muss mindestens ein Sonderzeichen enthalten"
+      missingSymbol: "Das Passwort muss mindestens ein Sonderzeichen enthalten",
     },
     confirmPassword: {
-    required: "Bitte bestätigen Sie Ihr Passwort",
-    invalid: "Die Passwörter stimmen nicht überein",
-  },
+      required: "Bitte bestätigen Sie Ihr Passwort",
+      invalid: "Die Passwörter stimmen nicht überein",
+    },
   },
 } as const;

@@ -120,7 +120,6 @@ function Login() {
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">{l.labels.email}</Label>
-                <Label htmlFor="email">{l.labels.email}</Label>
                 <Input
                   id="email"
                   type="text"
@@ -232,6 +231,7 @@ function Login() {
           <Button
             type="submit"
             className="w-full"
+            variant="default"
             onClick={() => {
               handleLogin();
             }}
