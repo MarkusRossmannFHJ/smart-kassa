@@ -37,7 +37,6 @@ import { login } from "@/utils/auth";
  */
 interface showError {
   EmailFocused: boolean;
-  EmailFocused: boolean;
   PasswordFocused: boolean;
 }
 
@@ -46,12 +45,11 @@ interface showError {
  * @returns Register Page where Users can Sign Up
  */
 function Login() {
-  const [email, setItentifier] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   // to show the user how to input valid data and in which input field
   const [showHint, setShowHint] = useState<showError>({
-    EmailFocused: false,
     EmailFocused: false,
     PasswordFocused: false,
   });
@@ -129,7 +127,6 @@ function Login() {
                   placeholder={l.placeholders.email}
                   required
                   value={email}
-                  value={email}
                   className={
                     (invalidemail &&
                       showHint.EmailFocused &&
@@ -141,13 +138,11 @@ function Login() {
                     setShowHint((prev) => ({
                       ...prev,
                       EmailFocused: true,
-                      EmailFocused: true,
                     }))
                   }
                   onFocus={() =>
                     setShowHint((prev) => ({
                       ...prev,
-                      EmailFocused: false,
                       EmailFocused: false,
                     }))
                   }
