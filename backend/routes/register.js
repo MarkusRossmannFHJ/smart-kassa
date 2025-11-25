@@ -57,7 +57,7 @@ router.post("/", async (req, res) => {
       !fn ||
       !atu
     ) {
-      return res.status(400).json({ error: "Missing required fields" });
+      return res.status(400).send({ error: "Missing required fields" });
     }
 
     // Check for duplicate email
@@ -128,13 +128,28 @@ router.post("/", async (req, res) => {
           .status(409)
           .send({ error: `Ein Account mit der FN '${fn}' existiert bereits.` });
       }
+      if (
+        /^Key \(phone_number\)=\(\+?\d+\s?\d+\) already exists\.$/.test(
+          error.detail
+        )
+      ) {
+        return res.status(409).send({
+          error: `Ein Account mit der Telefonnumer '${phone_number}' existiert bereits.`,
+        });
+      }
+      if (/^Key \(atu\)=\(ATU\d+\) already exists\.$/.test(error.detail)) {
+        return res.status(409).send({
+          error: `Ein Account mit der ATU-Nummer '${atu}' existiert bereits.`,
+        });
+      }
+      return res.status(500).send({ error: error });
     }
 
     // Store refresh token in httpOnly cookie (not accessible via JavaScript)
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true, // Prevents XSS attacks
       secure: process.env.NODE_ENV === "production", // HTTPS only in production
-      sameSite: "none", // CSRF protection
+      sameSite: "none", // Protection via HTTPS
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       path: "/",
     });

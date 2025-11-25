@@ -32,18 +32,23 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(400).send({ error: "Missing required fields" });
+  }
+
   try {
     // Query database for user account by email
     const result = await pool.query(
       `SELECT 
         account.account_id,
         account.password_hash,
-        users.id AS user_id,
+        account.name,
+        users.user_id AS user_id,
         users.email
       FROM account
       JOIN users
-        ON users.id = account.users_id
-      WHERE account.email = $1`,
+        ON users.user_id = account.user_id
+      WHERE users.email = $1`,
       [email]
     );
 
@@ -64,7 +69,7 @@ router.post("/", async (req, res) => {
     const payload = {
       userId: user.userId,
       email: user.email,
-      name: `${user.first_name} ${user.last_name}`,
+      name: user.name,
       business: user.business,
     };
 
@@ -77,17 +82,17 @@ router.post("/", async (req, res) => {
 
     // Update account record with new refresh token and expiration
     await pool.query(
-      `INSERT INTO account (token_expiress_at, refresh_token)
-      VALUES ($1, $2)`,
-      [expiresAt, refreshToken]
+      `UPDATE account SET token_expiress_at = $1, refresh_token = $2 WHERE user_id = $3`,
+      [expiresAt, refreshToken, user.userId]
     );
 
     // Store refresh token in httpOnly cookie (not accessible via JavaScript)
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true, // Prevents XSS attacks
       secure: process.env.NODE_ENV === "production", // HTTPS only in production
-      sameSite: "lax", // CSRF protection
+      sameSite: "none", // // Protection via HTTPS
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      path: "/",
     });
 
     // Return access token and user info to client
@@ -96,14 +101,14 @@ router.post("/", async (req, res) => {
       accessToken,
       user: {
         id: user.userId,
-        name: `${user.first_name} ${user.last_name}`,
+        name: user.name,
         email: user.email,
         business: user.business,
       },
     });
   } catch (err) {
     console.error("Error in /login:", err);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -113,7 +118,7 @@ router.post("/", async (req, res) => {
  * @route GET /login
  * @access Public
  */
-router.get("/", (req, res) => {
+router.get("/", (_, res) => {
   res.send("Server running on route /login");
 });
 

@@ -27,7 +27,7 @@ dotenv.config();
  */
 export function generateAccessToken(payload) {
   return jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: "5m",
+    expiresIn: "15m",
   });
 }
 
@@ -41,7 +41,7 @@ export function generateAccessToken(payload) {
  */
 export function generateRefreshToken(payload) {
   return jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
-    expiresIn: "1d",
+    expiresIn: "30d", 
   });
 }
 
