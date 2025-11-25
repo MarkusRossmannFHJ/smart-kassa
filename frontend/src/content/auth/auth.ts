@@ -27,6 +27,7 @@ export const authContent = {
       fn: "Firmenbuchnummer (FN)",
       phone: "Telefonnummer",
       password: shared.labels.password,
+      confirmPassword: shared.labels.password + " bestätigen"
     },
     placeholders: {
       vorname: "Max",
@@ -36,6 +37,7 @@ export const authContent = {
       fn: "FN123456a",
       phone: "+43 660 1234567",
       password: shared.placeholders.password,
+      confirmPassword: shared.placeholders.password,
     },
     buttons: {
       register: "Jetzt registrieren",

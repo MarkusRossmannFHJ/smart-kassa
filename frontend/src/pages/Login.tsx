@@ -37,6 +37,7 @@ import { login } from "@/utils/auth";
  */
 interface showError {
   EmailFocused: boolean;
+  EmailFocused: boolean;
   PasswordFocused: boolean;
 }
 
@@ -50,6 +51,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   // to show the user how to input valid data and in which input field
   const [showHint, setShowHint] = useState<showError>({
+    EmailFocused: false,
     EmailFocused: false,
     PasswordFocused: false,
   });
@@ -120,11 +122,13 @@ function Login() {
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">{l.labels.email}</Label>
+                <Label htmlFor="email">{l.labels.email}</Label>
                 <Input
                   id="email"
                   type="text"
                   placeholder={l.placeholders.email}
                   required
+                  value={email}
                   value={email}
                   className={
                     (invalidemail &&
@@ -132,16 +136,18 @@ function Login() {
                       "border-2 border-red-500") ||
                     ""
                   }
-                  onChange={(e) => setItentifier(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   onBlur={() =>
                     setShowHint((prev) => ({
                       ...prev,
+                      EmailFocused: true,
                       EmailFocused: true,
                     }))
                   }
                   onFocus={() =>
                     setShowHint((prev) => ({
                       ...prev,
+                      EmailFocused: false,
                       EmailFocused: false,
                     }))
                   }
@@ -155,6 +161,7 @@ function Login() {
                       transition={{ duration: 0.3 }}
                       className="text-red-500 text-sm"
                     >
+                      {v.email.invalid}
                       {v.email.invalid}
                     </motion.p>
                   )}
