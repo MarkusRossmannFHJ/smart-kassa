@@ -15,7 +15,7 @@ export async function register(
   dispatch: AppDispatch
 ) {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       `${import.meta.env.VITE_API_URL}/register`,
       {
         first_name: firstName,
@@ -30,14 +30,13 @@ export async function register(
       { withCredentials: true } // to set the refresh token in the Cookie
     );
 
-    if (!response) {
+    if (!data) {
       throw new Error("Response is Empty");
     }
-
-    AuthStorage.setTokens(response.data.accessToken);
+    AuthStorage.setTokens(data.accessToken);
     dispatch(
       signInUser({
-        id: response.data.id,
+        id: data.id,
         firstName: firstName,
         lastName: lastName,
         email: email,
@@ -45,7 +44,7 @@ export async function register(
       })
     );
 
-    return await response.data;
+    return await data;
   } catch (error) {
     console.error(error);
     if (error instanceof AxiosError) {
@@ -86,13 +85,17 @@ export async function register(
   }
 }
 
-export async function login(email: string, password: string) {
+export async function login(
+  email: string,
+  password: string,
+  dispatch: AppDispatch
+) {
   if (!email || !password) {
     throw new Error("Missing Fields");
   }
 
   try {
-    const { status, data } = await axios.post(
+    const { data } = await axios.post(
       `${import.meta.env.VITE_API_URL}/login`,
       {
         email: email,
@@ -101,10 +104,23 @@ export async function login(email: string, password: string) {
       { withCredentials: true } // to set the refresh token in the Cookie
     );
 
-    if (!status || !data) {
+    if (!data) {
       throw new Error("Response is empty");
     }
+
     AuthStorage.setTokens(data.accessToken);
+    console.log("Access Token: \n", AuthStorage.getAccessToken());
+    console.log("Access Token: \n", data.accessToken);
+    const user = data.user;
+    dispatch(
+      signInUser({
+        id: user.id,
+        firstName: user.name.split(" ")[0],
+        lastName: user.name.split(" ")[1],
+        email: user.email,
+        phoneNumber: "phone number need implementation",
+      })
+    );
     return await data;
   } catch (error) {
     console.error(error);
