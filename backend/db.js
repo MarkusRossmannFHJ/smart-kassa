@@ -6,7 +6,7 @@ const { Pool } = pkg;
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: false   // ✅ شيل الـ SSL خالص
+  ssl: false    
 });
 
 export default pool;
