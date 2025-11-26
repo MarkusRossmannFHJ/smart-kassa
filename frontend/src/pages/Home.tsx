@@ -3,9 +3,45 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../../redux/store";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Balance from "@/components/Balance";
-import { todayData } from "@/content/home/todayData";
 
+ export type RidesStats = {
+  day: string;
+  rides: number;
+};
 
+ const ridesData: RidesStats[] = [
+  { day: "Mon", rides: 42 },
+  { day: "Tue", rides: 57 },
+  { day: "Wed", rides: 31 },
+  { day: "Thu", rides: 68 },
+  { day: "Fri", rides: 75 },
+  { day: "Sat", rides: 54 },
+  { day: "Sun", rides: 39 },
+];
+
+ export type DailyStats = {
+  hour: string;
+  rides: number;
+};
+
+ const dailyRidesData: DailyStats[] = [
+  { hour: "00:00", rides: 1 },
+  { hour: "03:00", rides: 4 },
+  { hour: "06:00", rides: 5 },
+  { hour: "09:00", rides: 7 },
+];
+
+ export type MonthlyWeekStats = {
+  week: string;
+  rides: number;
+};
+
+ const monthlyWeekRidesData: MonthlyWeekStats[] = [
+  { week: "Week 1", rides: 120 },
+  { week: "Week 2", rides: 145 },
+  { week: "Week 3", rides: 110 },
+  { week: "Week 4", rides: 150 },
+];
 
 function Home() {
   const user = useSelector((state: RootState) => state.user);
@@ -39,15 +75,15 @@ function Home() {
   {/* CONTENT SECTION – FULL WIDTH BELOW */}
   <div className="w-full mt-4">
     <TabsContent value="today">
-      <Balance entry={todayData} />
+      <Balance entry={dailyRidesData} duration="day"/>
     </TabsContent>
 
     <TabsContent value="week">
-      <Balance />
+      <Balance entry={ridesData} duration="week"/>
     </TabsContent>
 
     <TabsContent value="month">
-      <Balance />
+      <Balance entry={monthlyWeekRidesData} duration="month"/>
     </TabsContent>
   </div>
 

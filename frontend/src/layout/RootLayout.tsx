@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import { CircleUser } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 
@@ -14,10 +14,30 @@ import SearchInput from "@/components/SearchInput";
 export default function RootLayout() {
   // to know which path is active for the underline in the footer
   const [path, setPath] = useState("home");
+  const [active, setActive] = useState(true);
+
+    useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+
+    const handler = () => {
+      // wenn large screen → sidebar immer öffnen
+      if (mq.matches) {
+        setActive(true);
+      }
+    };
+
+    // initial
+    handler();
+    // listener
+    mq.addEventListener("change", handler);
+
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
 
   return (
-    <SidebarProvider>
-      <div className="flex flex-col md:flex-row gap-4 w-full min-h-screen md:pt-4
+    <SidebarProvider open={active} onOpenChange={setActive}>
+      <div className="flex flex-col lg:flex-row gap-4 w-full min-h-screen md:pt-4
       bg-gray-400/20">
 
         {/* Content in Sidebar */}
@@ -29,10 +49,10 @@ export default function RootLayout() {
         h-16 backdrop-blur-md
         border-b border-zinc-300 dark:border-zinc-800 md:border-none
         flex items-center justify-between
-        px-4 z-50"
+        px-4 z-40"
           >
 
-            <SidebarTrigger className="md:hidden" />
+            <SidebarTrigger className="lg:hidden" />
 
             <SearchInput></SearchInput>
 

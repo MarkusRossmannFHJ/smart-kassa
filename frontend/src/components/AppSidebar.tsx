@@ -16,14 +16,14 @@ import { Link } from "react-router-dom";
 
 export function AppSidebar() {
   return (
-    <Sidebar className="w-full max-w-64">
+    <Sidebar className="hidden lg:flex w-full max-w-64 z-50">
       <SidebarHeader className="flex flex-row justify-between items-center">
         <Link to="/">
         <img src="/Logo.png" width={120} height={120}
         className="w-32 h-16 md:w-40 md:h-20"></img>
         </Link>
         
-          <SidebarTrigger className="md:hidden" />
+          <SidebarTrigger className="lg:hidden" />
       </SidebarHeader>
 
       <SidebarContent>
