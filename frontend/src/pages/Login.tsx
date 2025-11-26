@@ -1,6 +1,6 @@
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Card,
   CardHeader,
@@ -30,6 +30,7 @@ import { toastMessages } from "../content/auth/toastMessages";
 import { useWarningToast } from "../hooks/useToast";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../../redux/store";
+import { login } from "@/utils/auth";
 
 /**
  * To handle if user clicked in input field and focuses it
@@ -57,30 +58,28 @@ function Login() {
   const v = validationMessages.login;
   const t = toastMessages.login;
 
+  const navigator = useNavigate();
+
   // Redux States and Dispatches
   const toastState = useSelector((state: RootState) => state.toastState);
   const dispatch: AppDispatch = useDispatch();
 
-  const invalidEmail = useInvalidEmail(email);
+  const invalidemail = useInvalidEmail(email);
   const invalidPassword: PASSWORD_VALIDATOR = useInvalidPassword(password);
 
-  function handleLogin() {
-    //Since we haven't any backend data, this is the only check that can be made for now
-    if (invalidEmail) {
+  async function handleLogin() {
+    try {
+      await login(email, password, dispatch);
+      handleToast(true);
+      navigator("/");
+    } catch (error) {
+      console.error(error);
+      handleToast(false);
       return false;
     }
-
-    if (invalidPassword.passwordIsInvalid) {
-      return false;
-    }
-
-    return true;
   }
 
-  function handleToast() {
-    const isLoginSuccessful = handleLogin();
-    console.log(isLoginSuccessful);
-
+  async function handleToast(isLoginSuccessful: boolean) {
     if (isLoginSuccessful) {
       toast(t.success.title, {
         position: "top-center",
@@ -96,9 +95,8 @@ function Login() {
 
   useWarningToast(toastState.showWarning, t.warning.title, dispatch);
 
-  //Form Validator, so the email is valid and the password is min. 6 chars long
-  const formUnvalid =
-    invalidEmail || !invalidPassword.passwordminimum6Chars;
+  //Form Validator, so the username is not empty, the email is not unvalid and the password is min. 6 chars long, one Special char and one Digit
+  const formUnvalid = invalidemail || !invalidPassword.passwordminimum6Chars;
 
   return (
     <main
@@ -124,12 +122,12 @@ function Login() {
                 <Label htmlFor="email">{l.labels.email}</Label>
                 <Input
                   id="email"
-                  type="email"
+                  type="text"
                   placeholder={l.placeholders.email}
                   required
                   value={email}
                   className={
-                    (invalidEmail &&
+                    (invalidemail &&
                       showHint.EmailFocused &&
                       "border-2 border-red-500") ||
                     ""
@@ -149,7 +147,7 @@ function Login() {
                   }
                 />
                 <AnimatePresence>
-                  {invalidEmail && showHint.EmailFocused && (
+                  {invalidemail && showHint.EmailFocused && (
                     <motion.p
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -157,6 +155,7 @@ function Login() {
                       transition={{ duration: 0.3 }}
                       className="text-red-500 text-sm"
                     >
+                      {v.email.invalid}
                       {v.email.invalid}
                     </motion.p>
                   )}
@@ -232,8 +231,9 @@ function Login() {
           <Button
             type="submit"
             className="w-full"
+            variant="default"
             onClick={() => {
-              handleToast();
+              handleLogin();
             }}
             disabled={formUnvalid}
           >

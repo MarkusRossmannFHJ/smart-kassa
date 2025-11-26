@@ -54,7 +54,7 @@ export const authContent = {
       subtitle: "Melden Sie sich mit Ihren Zugangsdaten an",
     },
     labels: {
-      email: "E-Mail-Adresse",
+      email: "E-Mail",
       password: shared.labels.password,
     },
     placeholders: {

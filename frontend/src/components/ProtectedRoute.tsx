@@ -17,7 +17,6 @@ interface ProtectedRouteProps {
  * @returns
  */
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-
   // Überprüfen, ob der User eingeloggt ist
   // Kann man später mit einem Auth-Context oder localStorage machen
   const dispatch: AppDispatch = useDispatch();
@@ -63,4 +62,3 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
   return <>{children}</>;
 };
-

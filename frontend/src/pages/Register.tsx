@@ -76,6 +76,7 @@ function Register() {
   const t = toastMessages.register;
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   // to show the user how to input valid data and in which input field
   const [showHint, setShowHint] = useState<showError>({
     Firstnamefocused: false,
@@ -96,7 +97,10 @@ function Register() {
   const invalidFN = useInvalidFirmenbuchnummer(firmenbuchnummer);
   const invalidTelefonNumber = useInvalidTelefonnummer(telefonnummer);
   const invalidPassword: PASSWORD_VALIDATOR = useInvalidPassword(password);
-  const invalidConfirmPassword = useInvalidConfirmPassword(password, confirmPassword);
+  const invalidConfirmPassword = useInvalidConfirmPassword(
+    password,
+    confirmPassword
+  );
 
   // Redux States and Dispatches
   const toastState = useSelector((state: RootState) => state.toastState);
@@ -120,7 +124,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const response = await register(
+      await register(
         firstname,
         lastanme,
         email,
@@ -131,12 +135,26 @@ function Register() {
         atu,
         dispatch // to set Global User Variable (Injected)
       );
-
-      console.log(response.userId);
       toast.success(t.success.title);
       navigator("/");
-    } catch {
-      toast.error(t.error.title);
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        if (error.message === "Email already exists") {
+          toast.error(t.error.emailAlreadyInUse);
+        }
+        if (error.message === "FN already exists") {
+          toast.error(t.error.fnAlreadyInUse);
+        }
+        if (error.message === "Phonenumber already exists") {
+          toast.error(t.error.phoneNumberAlreadyInUse);
+        }
+        if (error.message === "ATU already exists") {
+          toast.error(t.error.atuAlreadyInUse);
+        }
+      } else {
+        toast.error(t.error.title);
+      }
     }
   };
 
@@ -161,7 +179,6 @@ function Register() {
               {/* Name Container */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-
                   <Label htmlFor="vorname">{r.labels.vorname}</Label>
                   <Input
                     id="vorname"
@@ -177,7 +194,10 @@ function Register() {
                     }
                     onChange={(e) => setFirstname(e.target.value)}
                     onBlur={() =>
-                      setShowHint((prev) => ({ ...prev, Firstnamefocused: true }))
+                      setShowHint((prev) => ({
+                        ...prev,
+                        Firstnamefocused: true,
+                      }))
                     }
                     onFocus={() =>
                       setShowHint((prev) => ({
@@ -216,10 +236,16 @@ function Register() {
                     }
                     onChange={(e) => setLastname(e.target.value)}
                     onBlur={() =>
-                      setShowHint((prev) => ({ ...prev, LastnameFocused: true }))
+                      setShowHint((prev) => ({
+                        ...prev,
+                        LastnameFocused: true,
+                      }))
                     }
                     onFocus={() =>
-                      setShowHint((prev) => ({ ...prev, LastnameFocused: false }))
+                      setShowHint((prev) => ({
+                        ...prev,
+                        LastnameFocused: false,
+                      }))
                     }
                   />
                   <AnimatePresence>
@@ -237,8 +263,8 @@ function Register() {
                   </AnimatePresence>
                 </div>
               </div>
-              
-               {/* Email - Number - Container */}
+
+              {/* Email - Number - Container */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="email">{r.labels.email}</Label>
@@ -318,8 +344,8 @@ function Register() {
                     )}
                   </AnimatePresence>
                 </div>
-              
-               {/* FN - ATU - Container */}
+
+                {/* FN - ATU - Container */}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -483,7 +509,9 @@ function Register() {
                 </div>
 
                 <div>
-                  <Label htmlFor="confirmPassword">{r.labels.confirmPassword}</Label>
+                  <Label htmlFor="confirmPassword">
+                    {r.labels.confirmPassword}
+                  </Label>
 
                   <InputGroup
                     className={
@@ -495,7 +523,7 @@ function Register() {
                   >
                     <InputGroupInput
                       id="confirmPassword"
-                      type={showPassword ? "text" : "password"}
+                      type={showConfirmPassword ? "text" : "password"}
                       title="Über 6 Zeichen mit einer Zahl und einem Zeichen"
                       placeholder={r.placeholders.confirmPassword}
                       required
@@ -511,17 +539,17 @@ function Register() {
 
                     <InputGroupAddon align="inline-end">
                       <div
-                        onClick={() => setShowPassword((prev) => !prev)}
+                        onClick={() => setShowConfirmPassword((prev) => !prev)}
                         className="cursor-pointer"
                       >
-                        {showPassword ? (
+                        {showConfirmPassword ? (
                           <EyeClosed width={19} />
                         ) : (
                           <Eye width={19} className="text-zinc-700" />
                         )}
                       </div>
                     </InputGroupAddon>
-                  </InputGroup>            
+                  </InputGroup>
                   <AnimatePresence>
                     {invalidConfirmPassword.missing &&
                       showHint.ConfirmPasswordFocused && (
@@ -537,7 +565,7 @@ function Register() {
                       )}
                   </AnimatePresence>
 
-                   <AnimatePresence>
+                  <AnimatePresence>
                     {!invalidConfirmPassword.matching &&
                       showHint.ConfirmPasswordFocused && (
                         <motion.p
@@ -552,12 +580,16 @@ function Register() {
                       )}
                   </AnimatePresence>
                 </div>
-
               </div>
             </div>
           </CardContent>
           <CardFooter className="flex-col gap-2">
-            <Button type="submit" className="w-full" disabled={formUnvalid}>
+            <Button
+              variant="default"
+              type="submit"
+              className="w-full"
+              disabled={formUnvalid}
+            >
               {r.buttons.register}
             </Button>
             <Button type="button" variant="outline" className="w-full">
