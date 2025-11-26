@@ -44,7 +44,8 @@ router.post("/", async (req, res) => {
         account.password_hash,
         account.name,
         users.user_id AS user_id,
-        users.email
+        users.email,
+        users.business
       FROM account
       JOIN users
         ON users.user_id = account.user_id
@@ -58,6 +59,7 @@ router.post("/", async (req, res) => {
     }
 
     const user = result.rows[0];
+    console.log("user:", user);
 
     // Verify password against stored Argon2 hash
     const valid = await argon2.verify(user.password_hash, password);
@@ -67,7 +69,7 @@ router.post("/", async (req, res) => {
 
     // Prepare payload for access token (includes user info for API requests)
     const payload = {
-      userId: user.userId,
+      userId: user.user_id,
       email: user.email,
       name: user.name,
       business: user.business,
@@ -75,7 +77,7 @@ router.post("/", async (req, res) => {
 
     // Generate both access and refresh tokens
     const accessToken = generateAccessToken(payload);
-    const refreshToken = generateRefreshToken({ userId: user.userId });
+    const refreshToken = generateRefreshToken({ userId: user.user_id });
 
     // Calculate refresh token expiration (30 days from now)
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
@@ -100,7 +102,7 @@ router.post("/", async (req, res) => {
       message: "Login successful",
       accessToken,
       user: {
-        id: user.userId,
+        id: user.user_id,
         name: user.name,
         email: user.email,
         business: user.business,
