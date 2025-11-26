@@ -1,8 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import { CircleUser } from "lucide-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import type { RootState } from "../../redux/store";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 
@@ -17,11 +15,10 @@ export default function RootLayout() {
   // to know which path is active for the underline in the footer
   const [path, setPath] = useState("home");
 
-  const user = useSelector((state: RootState) => state.user);
-
   return (
     <SidebarProvider>
-      <div className="flex flex-col md:flex-row w-full min-h-screen">
+      <div className="flex flex-col md:flex-row gap-4 w-full min-h-screen md:pt-4
+      bg-gray-400/20">
 
         {/* Content in Sidebar */}
         <AppSidebar />
@@ -29,9 +26,8 @@ export default function RootLayout() {
         <div className="flex flex-col w-full">
           <header
             className="
-        sticky h-16
-        backdrop-blur-md bg-white/60 dark:bg-black/40
-        border-b border-zinc-300 dark:border-zinc-800
+        h-16 backdrop-blur-md
+        border-b border-zinc-300 dark:border-zinc-800 md:border-none
         flex items-center justify-between
         px-4 z-50"
           >
@@ -52,7 +48,7 @@ export default function RootLayout() {
           </header>
 
           {/* The RootLayout will automatically inject the current Page */}
-          <main className="flex self-start pt-4 px-4">
+          <main className="flex pt-4 px-4">
             <Outlet />
           </main>
 
