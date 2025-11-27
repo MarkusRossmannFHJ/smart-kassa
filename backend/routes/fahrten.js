@@ -31,15 +31,15 @@ router.post("/start", async (req, res) => {
 
 router.post("/:fahrten_id/end", async (req, res) => {
   try {
-    const fahrten_id = Number(req.params.fahrten_id);
+    const fahrtId = Number(req.params.fahrten_id);
     const { endKm, lat, lng } = req.body;
 
-    if (!fahrten_id) {
+    if (!fahrtId) {
       return res.status(400).json({ error: "Invalid Fahrt ID" });
     }
 
     const fahrt = await fahrtenController.endFahrt({
-      fahrten_id,
+      fahrtId,
       endKm: endKm ?? null,
       lat: lat ?? null,
       lng: lng ?? null,
