@@ -1,3 +1,7 @@
+# AI Tools
+.claude
+.claude/*
+
 # Logs
 logs
 *.log
@@ -137,3 +141,9 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# SQL
+*.sql
+
+# Tools
+.claude/
