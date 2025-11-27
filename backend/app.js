@@ -28,6 +28,8 @@ import refreshRoutes from "./routes/refresh.js";
 import registerRoutes from "./routes/register.js";
 import loginRoutes from "./routes/login.js";
 import verifyRoutes from "./routes/verify.js";
+import fahrtRoutes from "./routes/fahrten.js";
+
 
 /**
  * Middleware Configuration
@@ -63,6 +65,8 @@ app.use("/refresh", refreshRoutes);
 app.use("/register", registerRoutes);
 app.use("/login", loginRoutes);
 app.use("/verify", verifyRoutes);
+app.use("/fahrten", fahrtRoutes);
+
 
 /**
  * Health Check Endpoint
