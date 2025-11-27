@@ -59,7 +59,6 @@ router.post("/", async (req, res) => {
     }
 
     const user = result.rows[0];
-    console.log("user:", user);
 
     // Verify password against stored Argon2 hash
     const valid = await argon2.verify(user.password_hash, password);
@@ -85,7 +84,7 @@ router.post("/", async (req, res) => {
     // Update account record with new refresh token and expiration
     await pool.query(
       `UPDATE account SET token_expiress_at = $1, refresh_token = $2 WHERE user_id = $3`,
-      [expiresAt, refreshToken, user.userId]
+      [expiresAt, refreshToken, user.user_id]
     );
 
     // Store refresh token in httpOnly cookie (not accessible via JavaScript)
