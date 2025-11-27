@@ -16,7 +16,6 @@ router.post("/start", async (req, res) => {
     const fahrt = await fahrtenController.startFahrt({
       userId,
       vehicleId: vehicleId ?? null,
-      startKm: startKm ?? null,
       lat: lat ?? null,
       lng: lng ?? null,
     });

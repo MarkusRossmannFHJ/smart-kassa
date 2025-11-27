@@ -3,7 +3,10 @@ import pool from "./db.js";
 class FahrtenController {
 
   //   start neue fahrt
-  async startFahrt({ userId, vehicleId, startKm, lat, lng }) {
+  async startFahrt({ userId, vehicleId, lat, lng }) {
+
+      const startKm = 0; // Initial start kilometer
+
     const result = await pool.query(
       `INSERT INTO fahrten (user_id, vehicle_id, start_km, start_lat, start_lng, status)
        VALUES ($1, $2, $3, $4, $5, 'open')
