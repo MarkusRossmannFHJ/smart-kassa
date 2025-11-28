@@ -73,8 +73,8 @@ export default function RootLayout() {
           </main>
 
 
-
-          <footer
+        {/* 
+         <footer
             className="
     h-16 w-full
     backdrop-blur-md bg-white/60 dark:bg-black/40
@@ -108,6 +108,8 @@ export default function RootLayout() {
               })}
             </nav>
           </footer>
+        */}
+         
         </div>
       </div>
     </SidebarProvider>
