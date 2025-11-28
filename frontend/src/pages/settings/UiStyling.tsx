@@ -7,8 +7,8 @@ const UiStyling = () => {
 
       {/* Page Header */}
       <div className="pb-6 border-b border-gray-300">
-        <h2 className="text-3xl font-extrabold text-gray-900">UI Settings</h2>
-        <p className="text-base text-gray-600 mt-2">
+        <h2 className="text-3xl font-extrabold">UI Settings</h2>
+        <p className="text-base text-gray-600 dark:text-gray-500 mt-2">
           Manage your style. Colors, System, etc..
         </p>
       </div>

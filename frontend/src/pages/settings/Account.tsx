@@ -25,8 +25,8 @@ const Account = () => {
 
       {/* Page Header */}
       <div className="pb-6 border-b border-gray-300">
-        <h2 className="text-3xl font-extrabold text-gray-900">Account Settings</h2>
-        <p className="text-base text-gray-600 mt-2">
+        <h2 className="text-3xl font-extrabold">Account Settings</h2>
+        <p className="text-base text-gray-600 dark:text-gray-500 mt-2">
           Manage your account information, avatar, and email settings.
         </p>
       </div>
@@ -59,9 +59,10 @@ const Account = () => {
             <div className="flex flex-col gap-2 items-start">
               <Button
                 className="
-                  px-6 py-3 font-extrabold border-2 border-violet-400
+                  px-8 py-3 font-extrabold border-2 border-violet-400
                   transition-all duration-200
                   hover:bg-violet-100
+                  hover:dark:bg-violet-700/50
                   hover:border-violet-500
                   hover:scale-[1.02]
                   active:scale-[0.98]
@@ -91,7 +92,7 @@ const Account = () => {
                         <Input
                           {...field}
                           placeholder="John"
-                          className="h-11 bg-gray-100 border border-violet-400 focus:ring-2 focus:ring-violet-400"
+                          className="h-11 bg-gray-100 dark:bg-gray-700 border border-violet-400 focus:ring-2 focus:ring-violet-400"
                         />
                       </FormControl>
                       <FormMessage />
@@ -110,7 +111,7 @@ const Account = () => {
                         <Input
                           {...field}
                           placeholder="Doe"
-                          className="h-11 bg-gray-100 border border-violet-400 focus:ring-2 focus:ring-violet-400"
+                          className="h-11 bg-gray-100 dark:bg-gray-700 border border-violet-400 focus:ring-2 focus:ring-violet-400"
                         />
                       </FormControl>
                       <FormMessage />
@@ -130,7 +131,7 @@ const Account = () => {
                           <Input
                             {...field}
                             placeholder="example@mail.com"
-                            className="h-11 bg-gray-100 border border-violet-400 focus:ring-2 focus:ring-violet-400"
+                            className="h-11 bg-gray-100 dark:bg-gray-700 border border-violet-400 focus:ring-2 focus:ring-violet-400"
                           />
                         </FormControl>
                         <FormMessage />

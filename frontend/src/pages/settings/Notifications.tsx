@@ -6,8 +6,8 @@ const Notifications = () => {
 
       {/* Page Header */}
       <div className="pb-6 border-b border-gray-300">
-        <h2 className="text-3xl font-extrabold text-gray-900">Notification Settings</h2>
-        <p className="text-base text-gray-600 mt-2">
+        <h2 className="text-3xl font-extrabold">Notification Settings</h2>
+        <p className="text-base text-gray-600 dark:text-gray-500 mt-2">
           Manage your notifications. Turn on or off the notifications you want to receive.
         </p>
       </div>
