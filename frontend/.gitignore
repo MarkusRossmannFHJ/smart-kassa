@@ -26,3 +26,27 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Capacitor
+android/
+ios/
+*.apk
+*.aab
+*.ipa
+
+# Capacitor generated files
+capacitor-cordova-android-plugins/
+capacitor-cordova-ios-plugins/
+
+# Android-specific
+local.properties
+*.keystore
+*.jks
+
+# iOS-specific
+*.mobileprovision
+*.p12
+DerivedData/
+
+# Capacitor plugins
+.capacitor/

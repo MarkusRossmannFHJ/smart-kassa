@@ -1,4 +1,4 @@
-import { Label } from "../components/ui/label";
+import { useState } from "react";
 import { Button } from "../components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -9,15 +9,6 @@ import {
   CardContent,
   CardFooter,
 } from "../components/ui/card";
-import { Input } from "../components/ui/input";
-import { useState } from "react";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "../components/ui/input-group";
-import { Eye, EyeClosed } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   useInvalidATU,
   useInvalidConfirmPassword,
@@ -36,20 +27,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useWarningToast } from "../hooks/useToast";
 import { register } from "../utils/auth";
 import { toast } from "sonner";
-
-/**
- * To handle if user clicked in input field and focuses it
- */
-interface showError {
-  Firstnamefocused: boolean;
-  LastnameFocused: boolean;
-  EmailFocused: boolean;
-  PasswordFocused: boolean;
-  ConfirmPasswordFocused: boolean;
-  ATUFocused: boolean;
-  FNFocused: boolean;
-  TelefonnummerFocused: boolean;
-}
+import type {
+  Container,
+  PasswordContainer,
+  showError,
+} from "../../constants/Compontents";
+import Inputs from "@/components/Inputs";
+import PasswordInputs from "@/components/PasswordInputs";
 
 /**
  * The Sign Up page, where users Sign Up
@@ -64,6 +48,8 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [atu, setAtu] = useState("");
   const [firmenbuchnummer, setFirmenbuchnummer] = useState("");
   const [telefonnummer, setTelefonnummer] = useState("");
@@ -75,8 +61,6 @@ function Register() {
   const v = validationMessages.register;
   const t = toastMessages.register;
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   // to show the user how to input valid data and in which input field
   const [showHint, setShowHint] = useState<showError>({
     Firstnamefocused: false,
@@ -158,8 +142,204 @@ function Register() {
     }
   };
 
+  const nameContainer: Container[] = [
+    {
+      className:
+        (invalidFirstname &&
+          showHint.Firstnamefocused &&
+          "border-2 border-red-500") ||
+        "",
+      id: "vorname",
+      label: r.labels.vorname,
+      onBlurListener: () =>
+        setShowHint((prev) => ({
+          ...prev,
+          Firstnamefocused: true,
+        })),
+      onChangeListener: setFirstname,
+      onFocusListener: () =>
+        setShowHint((prev) => ({
+          ...prev,
+          Firstnamefocused: false,
+        })),
+      placeholder: r.placeholders.vorname,
+      type: "text",
+      validation: invalidFirstname && showHint.Firstnamefocused,
+      value: firstname,
+      validationMessage: v.vorname.required,
+    },
+    {
+      className:
+        (invalidLastname &&
+          showHint.LastnameFocused &&
+          "border-2 border-red-500") ||
+        "",
+      id: "nachname",
+      label: r.labels.nachanme,
+      onBlurListener: () =>
+        setShowHint((prev) => ({
+          ...prev,
+          LastnameFocused: true,
+        })),
+      onChangeListener: setLastname,
+      onFocusListener: () =>
+        setShowHint((prev) => ({
+          ...prev,
+          LastnameFocused: false,
+        })),
+      placeholder: r.placeholders.nachanme,
+      type: "text",
+      validation: invalidLastname && showHint.LastnameFocused,
+      value: lastanme,
+      validationMessage: v.nachanme.required,
+    },
+  ];
+
+  const verificationContainer: Container[] = [
+    {
+      className:
+        (invalidEmail && showHint.EmailFocused && "border-2 border-red-500") ||
+        "",
+      id: "email",
+      label: r.labels.email,
+      onBlurListener: () =>
+        setShowHint((prev) => ({ ...prev, EmailFocused: true })),
+      onChangeListener: setEmail,
+      onFocusListener: () =>
+        setShowHint((prev) => ({ ...prev, EmailFocused: false })),
+      placeholder: r.placeholders.email,
+      type: "email",
+      validation: invalidEmail && showHint.EmailFocused,
+      validationMessage: v.email.invalid,
+      value: email,
+    },
+    {
+      className:
+        (invalidTelefonNumber &&
+          showHint.TelefonnummerFocused &&
+          "border-2 border-red-500") ||
+        "",
+      id: "Telefonnummer",
+      label: r.labels.phone,
+      onBlurListener: () =>
+        setShowHint((prev) => ({
+          ...prev,
+          TelefonnummerFocused: true,
+        })),
+      onChangeListener: setTelefonnummer,
+      onFocusListener: () =>
+        setShowHint((prev) => ({
+          ...prev,
+          TelefonnummerFocused: false,
+        })),
+      placeholder: r.placeholders.phone,
+      type: "tel",
+      validation: invalidTelefonNumber && showHint.TelefonnummerFocused,
+      validationMessage: v.phone.invalid,
+      value: telefonnummer,
+    },
+  ];
+
+  const businessContainer: Container[] = [
+    {
+      className:
+        (invalidFN && showHint.FNFocused && "border-2 border-red-500") || "",
+      id: "FirmenBuchNummer",
+      label: r.labels.fn,
+      onBlurListener: () =>
+        setShowHint((prev) => ({ ...prev, FNFocused: true })),
+      onChangeListener: setFirmenbuchnummer,
+      onFocusListener: () =>
+        setShowHint((prev) => ({ ...prev, FNFocused: false })),
+      placeholder: r.placeholders.fn,
+      type: "text",
+      validation: invalidFN && showHint.FNFocused,
+      validationMessage: v.fn.invalid,
+      value: firmenbuchnummer,
+    },
+    {
+      className:
+        (invalidATU && showHint.ATUFocused && "border-2 border-red-500") || "",
+      id: "ATU",
+      label: r.labels.atu,
+      onBlurListener: () =>
+        setShowHint((prev) => ({ ...prev, ATUFocused: true })),
+      onChangeListener: setAtu,
+      onFocusListener: () =>
+        setShowHint((prev) => ({ ...prev, ATUFocused: false })),
+      placeholder: r.placeholders.atu,
+      type: "text",
+      validation: invalidATU && showHint.ATUFocused,
+      validationMessage: v.atu.invalid,
+      value: atu,
+    },
+  ];
+
+  const passwordContainer: PasswordContainer[] = [
+    {
+      className:
+        (invalidPassword.passwordIsInvalid &&
+          showHint.PasswordFocused &&
+          "border-2 border-red-500") ||
+        "",
+      id: "password",
+      label: r.labels.password,
+      onBlurListener: () =>
+        setShowHint((prev) => ({
+          ...prev,
+          PasswordFocused: true,
+        })),
+      onChangeListener: setPassword,
+      setShowPassword: setShowPassword,
+      showPassword: showPassword,
+      placeholder: r.placeholders.password,
+      title: "Über 6 Zeichen mit einer Zahl und einem Zeichen",
+      type: showPassword ? "text" : "password",
+      validation: [
+        !invalidPassword.passwordhasNumber && showHint.PasswordFocused,
+        !invalidPassword.passwordhasSpecialChar && showHint.PasswordFocused,
+        !invalidPassword.passwordminimum6Chars && showHint.PasswordFocused,
+      ],
+      validationMessage: [
+        v.password.missingNumber,
+        v.password.missingSymbol,
+        v.password.tooShort,
+      ],
+      value: password,
+    },
+    {
+      className:
+        (invalidConfirmPassword.invalid &&
+          showHint.ConfirmPasswordFocused &&
+          "border-2 border-red-500") ||
+        "",
+      id: "confirmPassword",
+      label: r.labels.confirmPassword,
+      onBlurListener: () =>
+        setShowHint((prev) => ({
+          ...prev,
+          ConfirmPasswordFocused: true,
+        })),
+      onChangeListener: setConfirmPassword,
+      setShowPassword: setShowConfirmPassword,
+      showPassword: showConfirmPassword,
+      placeholder: r.placeholders.confirmPassword,
+      title: "Über 6 Zeichen mit einer Zahl und einem Zeichen",
+      type: showConfirmPassword ? "text" : "password",
+      validation: [
+        invalidConfirmPassword.missing && showHint.ConfirmPasswordFocused,
+        !invalidConfirmPassword.matching && showHint.ConfirmPasswordFocused,
+      ],
+      validationMessage: [
+        v.confirmPassword.required,
+        v.confirmPassword.invalid,
+      ],
+      value: confirmPassword,
+    },
+  ];
+
   return (
-    <main className="min-w-screen min-h-screen flex justify-center items-center bg-zinc-200 dark:bg-black overflow-y-auto scrollbar-hide">
+    <main className="py-7 min-w-screen min-h-screen flex justify-center items-center bg-zinc-200 dark:bg-black overflow-y-auto scrollbar-hide">
       <Card className="w-11/12 max-w-sm md:max-w-xl my-5 dark:bg-zinc-900 pt-4">
         <img
           src="Logo.png"
@@ -177,410 +357,13 @@ function Register() {
             {/* Main Container */}
             <div className="flex flex-col gap-6">
               {/* Name Container */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="vorname">{r.labels.vorname}</Label>
-                  <Input
-                    id="vorname"
-                    type="text"
-                    placeholder={r.placeholders.vorname}
-                    required
-                    value={firstname}
-                    className={
-                      (invalidFirstname &&
-                        showHint.Firstnamefocused &&
-                        "border-2 border-red-500") ||
-                      ""
-                    }
-                    onChange={(e) => setFirstname(e.target.value)}
-                    onBlur={() =>
-                      setShowHint((prev) => ({
-                        ...prev,
-                        Firstnamefocused: true,
-                      }))
-                    }
-                    onFocus={() =>
-                      setShowHint((prev) => ({
-                        ...prev,
-                        Firstnamefocused: false,
-                      }))
-                    }
-                  />
-                  <AnimatePresence>
-                    {invalidFirstname && showHint.Firstnamefocused && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                        className="text-red-500 text-sm"
-                      >
-                        {v.vorname.required}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-                <div>
-                  <Label htmlFor="nachname">{r.labels.nachanme}</Label>
-                  <Input
-                    id="nachname"
-                    type="text"
-                    placeholder={r.placeholders.nachanme}
-                    required
-                    value={lastanme}
-                    className={
-                      (invalidLastname &&
-                        showHint.LastnameFocused &&
-                        "border-2 border-red-500") ||
-                      ""
-                    }
-                    onChange={(e) => setLastname(e.target.value)}
-                    onBlur={() =>
-                      setShowHint((prev) => ({
-                        ...prev,
-                        LastnameFocused: true,
-                      }))
-                    }
-                    onFocus={() =>
-                      setShowHint((prev) => ({
-                        ...prev,
-                        LastnameFocused: false,
-                      }))
-                    }
-                  />
-                  <AnimatePresence>
-                    {invalidLastname && showHint.LastnameFocused && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                        className="text-red-500 text-sm"
-                      >
-                        {v.nachanme.required}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-
+              <Inputs Containers={nameContainer} />
               {/* Email - Number - Container */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="email">{r.labels.email}</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder={r.placeholders.email}
-                    required
-                    value={email}
-                    className={
-                      (invalidEmail &&
-                        showHint.EmailFocused &&
-                        "border-2 border-red-500") ||
-                      ""
-                    }
-                    onChange={(e) => setEmail(e.target.value)}
-                    onBlur={() =>
-                      setShowHint((prev) => ({ ...prev, EmailFocused: true }))
-                    }
-                    onFocus={() =>
-                      setShowHint((prev) => ({ ...prev, EmailFocused: false }))
-                    }
-                  />
-                  <AnimatePresence>
-                    {invalidEmail && showHint.EmailFocused && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                        className="text-red-500 text-sm"
-                      >
-                        {v.email.invalid}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-                <div>
-                  <Label htmlFor="Telefonnummer">{r.labels.phone}</Label>
-                  <Input
-                    id="Telefonnummer"
-                    type="tel"
-                    placeholder={r.placeholders.phone}
-                    required
-                    value={telefonnummer}
-                    className={
-                      (invalidTelefonNumber &&
-                        showHint.TelefonnummerFocused &&
-                        "border-2 border-red-500") ||
-                      ""
-                    }
-                    onChange={(e) => setTelefonnummer(e.target.value)}
-                    onBlur={() =>
-                      setShowHint((prev) => ({
-                        ...prev,
-                        TelefonnummerFocused: true,
-                      }))
-                    }
-                    onFocus={() =>
-                      setShowHint((prev) => ({
-                        ...prev,
-                        TelefonnummerFocused: false,
-                      }))
-                    }
-                  />
-                  <AnimatePresence>
-                    {invalidTelefonNumber && showHint.TelefonnummerFocused && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                        className="text-red-500 text-sm"
-                      >
-                        {v.phone.invalid}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* FN - ATU - Container */}
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="FirmenBuchNummer">{r.labels.fn}</Label>
-                  <Input
-                    id="FirmenBuchNummer"
-                    type="text"
-                    placeholder={r.placeholders.fn}
-                    required
-                    value={firmenbuchnummer}
-                    className={
-                      (invalidFN &&
-                        showHint.FNFocused &&
-                        "border-2 border-red-500") ||
-                      ""
-                    }
-                    onChange={(e) => setFirmenbuchnummer(e.target.value)}
-                    onBlur={() =>
-                      setShowHint((prev) => ({ ...prev, FNFocused: true }))
-                    }
-                    onFocus={() =>
-                      setShowHint((prev) => ({ ...prev, FNFocused: false }))
-                    }
-                  />
-                  <AnimatePresence>
-                    {invalidFN && showHint.FNFocused && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                        className="text-red-500 text-sm"
-                      >
-                        {v.fn.invalid}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-                <div>
-                  <Label htmlFor="ATU">{r.labels.atu}</Label>
-                  <Input
-                    id="ATU"
-                    type="text"
-                    placeholder={r.placeholders.atu}
-                    required
-                    value={atu}
-                    className={
-                      (invalidATU &&
-                        showHint.ATUFocused &&
-                        "border-2 border-red-500") ||
-                      ""
-                    }
-                    onChange={(e) => setAtu(e.target.value)}
-                    onBlur={() =>
-                      setShowHint((prev) => ({ ...prev, ATUFocused: true }))
-                    }
-                    onFocus={() =>
-                      setShowHint((prev) => ({ ...prev, ATUFocused: false }))
-                    }
-                  />
-                  <AnimatePresence>
-                    {invalidATU && showHint.ATUFocused && (
-                      <motion.p
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                        className="text-red-500 text-sm"
-                      >
-                        {v.atu.invalid}
-                      </motion.p>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
+              <Inputs Containers={verificationContainer} />
+              {/* FN - ATU - Container */}
+              <Inputs Containers={businessContainer} />
               {/* password - Container */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="password">{r.labels.password}</Label>
-
-                  <InputGroup
-                    className={
-                      (invalidPassword.passwordIsInvalid &&
-                        showHint.PasswordFocused &&
-                        "border-2 border-red-500") ||
-                      ""
-                    }
-                  >
-                    <InputGroupInput
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      title="Über 6 Zeichen mit einer Zahl und einem Zeichen"
-                      placeholder={r.placeholders.password}
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      onBlur={() =>
-                        setShowHint((prev) => ({
-                          ...prev,
-                          PasswordFocused: true,
-                        }))
-                      }
-                    />
-
-                    <InputGroupAddon align="inline-end">
-                      <div
-                        onClick={() => setShowPassword((prev) => !prev)}
-                        data-testid="password-toggle"
-                        className="cursor-pointer"
-                      >
-                        {showPassword ? (
-                          <EyeClosed width={19} />
-                        ) : (
-                          <Eye width={19} className="text-zinc-700" />
-                        )}
-                      </div>
-                    </InputGroupAddon>
-                  </InputGroup>
-                  <AnimatePresence>
-                    {!invalidPassword.passwordhasNumber &&
-                      showHint.PasswordFocused && (
-                        <motion.p
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.3 }}
-                          className="text-red-500 text-sm"
-                        >
-                          {v.password.missingNumber}
-                        </motion.p>
-                      )}
-                  </AnimatePresence>
-                  <AnimatePresence>
-                    {!invalidPassword.passwordhasSpecialChar &&
-                      showHint.PasswordFocused && (
-                        <motion.p
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.3 }}
-                          className="text-red-500 text-sm"
-                        >
-                          {v.password.missingSymbol}
-                        </motion.p>
-                      )}
-                  </AnimatePresence>
-                  <AnimatePresence>
-                    {!invalidPassword.passwordminimum6Chars &&
-                      showHint.PasswordFocused && (
-                        <motion.p
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.3 }}
-                          className="text-red-500 text-sm"
-                        >
-                          {v.password.tooShort}
-                        </motion.p>
-                      )}
-                  </AnimatePresence>
-                </div>
-
-                <div>
-                  <Label htmlFor="confirmPassword">
-                    {r.labels.confirmPassword}
-                  </Label>
-
-                  <InputGroup
-                    className={
-                      (invalidConfirmPassword.invalid &&
-                        showHint.ConfirmPasswordFocused &&
-                        "border-2 border-red-500") ||
-                      ""
-                    }
-                  >
-                    <InputGroupInput
-                      id="confirmPassword"
-                      type={showConfirmPassword ? "text" : "password"}
-                      title="Über 6 Zeichen mit einer Zahl und einem Zeichen"
-                      placeholder={r.placeholders.confirmPassword}
-                      required
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      onBlur={() =>
-                        setShowHint((prev) => ({
-                          ...prev,
-                          ConfirmPasswordFocused: true,
-                        }))
-                      }
-                    />
-
-                    <InputGroupAddon align="inline-end">
-                      <div
-                        onClick={() => setShowConfirmPassword((prev) => !prev)}
-                        className="cursor-pointer"
-                      >
-                        {showConfirmPassword ? (
-                          <EyeClosed width={19} />
-                        ) : (
-                          <Eye width={19} className="text-zinc-700" />
-                        )}
-                      </div>
-                    </InputGroupAddon>
-                  </InputGroup>
-                  <AnimatePresence>
-                    {invalidConfirmPassword.missing &&
-                      showHint.ConfirmPasswordFocused && (
-                        <motion.p
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.3 }}
-                          className="text-red-500 text-sm"
-                        >
-                          {v.confirmPassword.required}
-                        </motion.p>
-                      )}
-                  </AnimatePresence>
-
-                  <AnimatePresence>
-                    {!invalidConfirmPassword.matching &&
-                      showHint.ConfirmPasswordFocused && (
-                        <motion.p
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.3 }}
-                          className="text-red-500 text-sm"
-                        >
-                          {v.confirmPassword.invalid}
-                        </motion.p>
-                      )}
-                  </AnimatePresence>
-                </div>
-              </div>
+              <PasswordInputs PasswordContainer={passwordContainer} />
             </div>
           </CardContent>
           <CardFooter className="flex-col gap-2">
