@@ -2,6 +2,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Account from "./Account"
 import Notifications from "./Notifications"
+import UiStyling from "./UiStyling"
 
 const Settings = () => {
 
@@ -11,7 +12,7 @@ const Settings = () => {
       <TabsList className="grid grid-cols-3 w-full md:w-auto max-w-[400px]">
         <TabsTrigger value="account">Account</TabsTrigger>
         <TabsTrigger value="notifications">Notifications</TabsTrigger>
-        <TabsTrigger value="theme">Theme</TabsTrigger>
+        <TabsTrigger value="ui-styling">UI-Styling</TabsTrigger>
    
       </TabsList>
 
@@ -24,8 +25,8 @@ const Settings = () => {
           <Notifications/>
         </TabsContent>
 
-        <TabsContent value="theme">
-          <p>yeah</p>
+        <TabsContent value="ui-styling">
+          <UiStyling></UiStyling>
         </TabsContent>
       </div>
 
