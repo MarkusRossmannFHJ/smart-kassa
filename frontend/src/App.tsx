@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 //import { ProtectedRoute } from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import RootLayout from "./layout/RootLayout";
-import Settings from "./pages/Settings";
+import Settings from "./pages/settings/Settings";
 
 /**
  * The Routes are all declared here

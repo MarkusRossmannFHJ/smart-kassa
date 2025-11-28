@@ -1,11 +1,12 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Account from "./Account"
+import Notifications from "./Notifications"
 
 const Settings = () => {
 
   return (
-    <Tabs defaultValue="today" className="w-full flex flex-col">
+    <Tabs defaultValue="account" className="w-full flex flex-col">
 
       <TabsList className="grid grid-cols-3 w-full md:w-auto max-w-[400px]">
         <TabsTrigger value="account">Account</TabsTrigger>
@@ -20,7 +21,7 @@ const Settings = () => {
         </TabsContent>
 
         <TabsContent value="notifications">
-          <p>Was geht</p>
+          <Notifications/>
         </TabsContent>
 
         <TabsContent value="theme">
